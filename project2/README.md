@@ -2,7 +2,7 @@
 
 Web Programming with Python and JavaScript
 
-* Requirements
+### Requirements
 - Display Name
 - Channel Creation
 - Channel List
