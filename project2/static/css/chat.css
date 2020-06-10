@@ -1,0 +1,56 @@
+#body {
+  background-color: #0f0627;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  margin-top: 6rem;
+}
+
+.alert {
+  margin: auto;
+  display: block;
+  width: 50%;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.card {
+  width: 40%;
+}
+.card .card-body {
+  background-color: rgba(15, 199, 92, 0.7);
+}
+
+.div-input {
+  padding: 10px;
+}
+.div-input span {
+  background-color: #eec408;
+  font-weight: bold;
+}
+
+#chat-main-div {
+  padding: 3rem;
+  border: 2px solid #eec408;
+  background-color: rgba(15, 199, 92, 0.7);
+}
+#chat-main-div .col {
+  border: 1px solid #eec408;
+  overflow: hidden;
+}
+#chat-main-div .col .chat-titles {
+  font-size: 2.5vw;
+  font-weight: bold;
+  font-style: italic;
+}
+#chat-main-div .col hr {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  background-color: #eec408;
+}
+
+/*# sourceMappingURL=chat.css.map */

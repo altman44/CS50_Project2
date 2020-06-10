@@ -1,0 +1,34 @@
+#body {
+  background-color: #0f0627;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  margin-top: 6rem;
+}
+
+.alert {
+  margin: auto;
+  display: block;
+  width: 50%;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.card {
+  width: 40%;
+}
+.card .card-body {
+  background-color: rgba(15, 199, 92, 0.7);
+}
+
+.div-input {
+  padding: 10px;
+}
+.div-input span {
+  background-color: #eec408;
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=base.css.map */

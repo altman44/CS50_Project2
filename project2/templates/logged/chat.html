@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+{% endblock head %}
+
+{% block title %}
+    Chat
+{% endblock title %}
+
+{% block body %}
+    <div id="chat-main-div" class="jumbotron m-5">
+        <div class="row container-fluid justify-content-around">
+            <div id="col-chat" class="col col-9">
+                <div id="chat-div">
+                    <div class="row">
+                        <div class="col col-3">
+                            <p class="chat-titles">Users</p>
+                            <hr>
+                            <div id="chat-div-users">
+                                {% for user in users %}
+                                    <div class="chat-div-user">
+                                        {{ user.username }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col col-9">
+                            <p class="chat-titles">Chat</p>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-2">
+
+            </div>
+        </div>
+    </div>
+{% endblock body %}
