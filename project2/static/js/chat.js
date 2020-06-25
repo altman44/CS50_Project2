@@ -35,14 +35,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let userTitle;
 
     divUsers.innerHTML = "";
-    JSON.parse(sessionStorage.getItem("users")).forEach(username => {
+    JSON.parse(sessionStorage.getItem("users")).forEach(dataUser => {
       divUser = document.createElement("div");
       divUser.setAttribute("class", "div-user");
       userTitle = document.createElement("p");
       userTitle.setAttribute("class", "p-user-title");
-      userTitle.innerHTML = username;
+      userTitle.innerHTML = dataUser.username;
       divUser.appendChild(userTitle);
-      divUser.addEventListener("click", () => loadChatUser(username));
+      divUser.addEventListener("click", () => loadChatUser(dataUser.id));
       divUsers.appendChild(divUser);
     });
   }

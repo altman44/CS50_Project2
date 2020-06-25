@@ -6,7 +6,8 @@ AllMessages = [
     Message('nico', 'juan', 'Hola Juan'), 
     Message('juan', 'nico', 'Hola Nico'), 
     Message('nico', 'juan', 'soy nico'),
-    Message('nico', 'nico', 'Este es un mensaje conmigo mismo')
+    Message('nico', 'nico', 'Este es un mensaje conmigo mismo'),
+    Message('juan', 'nico', 'Ya se que sos nico')
 ]
 
 @app.route('/chat', methods=['GET', 'POST'])
@@ -20,7 +21,6 @@ def login():
 
     # POST
     if request.method == 'POST':
-        print(request.form)
         username = request.form['username']
         if username == '':
             flash("You must enter your username to login", 'danger')
@@ -40,10 +40,12 @@ def login():
             redirect('before_first_request')
 
         if username not in users:
-            users.append(username)
+            dataUser = User(username, username)
+            users.append(dataUser)
 
         session['username'] = username
         session['activeUser'] = True
+        session['currentIdReceiver'] = None
         return render_template('logged/chat.html')
 
 
@@ -59,7 +61,7 @@ def fetchUsers():
 def message(data):
     if data['message']:
         idSender = session['username']
-        idReceiver = data['receiver']
+        idReceiver = session['currentIdReceiver']
         message = data['message']
         message = Message(idSender, idReceiver, message)
         AllMessages.append(message)
@@ -69,6 +71,7 @@ def message(data):
 @app.route('/fetchMessages', methods=['POST'])
 def fetchMessages():
     idReceiver = request.form['idReceiver']
+    session['currentIdReceiver'] = idReceiver
     obj = {}
     messages = []
 
