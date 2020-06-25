@@ -1,7 +1,3 @@
-$color-primary: rgb(18, 212, 147);
-$color-primary-soft: rgba(18, 212, 147, .5);
-$color-secondary: rgb(238, 196, 8);
-
 #body {
   background-color: #0f0627;
 }
@@ -22,18 +18,17 @@ $color-secondary: rgb(238, 196, 8);
 
 .card {
   width: 40%;
-  .card-body {
-    background-color: $color-primary;
-  }
+}
+.card .card-body {
+  background-color: #12d493;
 }
 
 .div-input {
   padding: 10px;
-
-  span {
-    background-color: $color-secondary;
-    font-weight: bold;
-  }
+}
+.div-input span {
+  background-color: #eec408;
+  font-weight: bold;
 }
 
 /* scrollbar width */
@@ -55,5 +50,7 @@ $color-secondary: rgb(238, 196, 8);
 
 /* scrollbar Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(247, 250, 250, 1);
+  background-color: #f7fafa;
 }
+
+/*# sourceMappingURL=base.css.map */

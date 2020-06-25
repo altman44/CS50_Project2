@@ -1,0 +1,122 @@
+@use 'base';
+$color-chat: rgb(224, 241, 241);
+$color-chat-message: rgba(181, 168, 214, 0.774);
+$color-submit-message: $color-chat-message;
+$color-div-user-normal: #ffffff;
+$color-div-user-active: base.$color-primary-soft;
+
+#chat-main-div {
+    padding: 1rem;
+    border: 2px solid base.$color-secondary;
+    background-color: base.$color-primary;
+    margin: 2vh 2vw 2vh 2vw;
+
+    .col {
+        border: 1px solid base.$color-secondary;
+        overflow: hidden;
+        
+        .chat-div-titles {
+            border-bottom: 1px solid base.$color-secondary;
+            margin-bottom: 10px;
+
+            .chat-titles {
+                font: bold italic small-caps 2.5vw "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+                margin: 2vh 0 0 0;
+            }
+        }
+
+        #chat-div-chat {
+            #chat-div-messages {
+                background-color: $color-chat;
+                margin: 2vh 0 0 0;
+                padding: 0;
+                max-width: 100%;
+
+                #chat-div-messages-inside {
+                    padding: 2vh 1.5vw 2vh 1.5vw;
+                    overflow-y: scroll;
+                    overflow-x: hidden;
+                    scroll-behavior: smooth;
+                    overscroll-behavior: smooth;
+                    height: 68vh;
+                    max-width: 100%;
+
+                    .div-message {
+                        margin-top: 0.5vh;
+    
+                        .message-div-text {
+                            max-width: 60%;
+                            background-color: $color-chat-message;
+                            padding: 1vh 1vw .8vh 1vw;
+    
+                            .title-author-message {
+                                font: italic bold 1.2vw Georgia, serif;
+                                margin: 0;
+                            }
+    
+                            .message-content-text {
+                                font: 1vw Georgia, serif;
+                                margin: 0;
+                                overflow-wrap: break-word;
+                            }
+                        }
+                    }
+                }
+            }
+        
+            #chat-div-submit {
+                background-color: $color-submit-message;
+
+                #input-message {
+                    font-size: 100%;
+                    height: 100%;
+                    padding: 0;
+                    margin: 0;
+                    background-color: inherit;
+                    border: 0;
+                    padding: 1%;
+                }
+
+                #btn-submit-msg {
+                    overflow: hidden;
+                    background-color: inherit;
+                    img {
+                        width: 50%;
+                        height: 50%;
+                    }
+                }
+            }
+        }
+    
+        #chat-div-users {
+            height: 90%;      
+
+            #chat-div-users-inside {
+                overflow-y: scroll;
+                overflow-x: hidden;
+                scroll-behavior: smooth;
+                overscroll-behavior: smooth;
+                background-color: #ffffff;
+                height: inherit;
+
+                .div-user {
+                    //display: flex;
+                    //flex-wrap: nowrap;
+                    //flex-direction: row;
+                    background-color: $color-div-user-normal;
+                    border: 1px solid grey;
+
+                    :hover {
+                        cursor: pointer;
+                        background-color: $color-div-user-active;
+                    }
+                    .p-user-title {
+                        font-size: 1.6vw;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+        
+    }   
+}

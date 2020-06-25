@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+{% endblock head %}
+
+{% block title %}
+Chat
+{% endblock title %}
+
+{% block body %}
+<div id="chat-main-div" class="jumbotron">
+    <div class="row container-fluid justify-content-around">
+        <div id="col-chat" class="col">
+            <div id="chat-div">
+                <div class="row">
+                    <div class="col col-12 col-lg-10 col-md-10 col-sm-12 col-xs-12">
+                        <div class="chat-div-titles">
+                            <p class="chat-titles">{{ session.username }}</p>
+                        </div>
+                        <div id="chat-div-chat">
+                            <div id="chat-div-messages" class="jumbotron">
+                                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                                    <a id="chat-title-with-who" class="navbar-brand" href="#">{{ session.username }}</a>
+                                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                                        data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+                                        aria-expanded="false" aria-label="Toggle navigation">
+                                        <span class="navbar-toggler-icon"></span>
+                                    </button>
+                                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                                        <div class="navbar-nav">
+                                            <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+                                            <a class="nav-item nav-link" href="#">Features</a>
+                                        </div>
+                                    </div>
+                                </nav>
+                                <div id="chat-div-messages-inside">
+
+                                </div>
+                                <div id="chat-div-submit" class="row input-group mb-3 p-0 m-0">
+                                    <div class="col-11 p-0 m-0">
+                                        <input id="input-message" type="text" class="form-control"
+                                            placeholder="Enter your message" aria-label="Username"
+                                            aria-describedby="basic-addon1">
+                                    </div>
+                                    <div class="input-group-prepend col-1 p-0 m-0">
+                                        <button id="btn-submit-msg" class="btn btn-control">
+                                            <img src="https://img.icons8.com/nolan/64/filled-sent.png" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-12 col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <div class="chat-div-titles">
+                            <p class="chat-titles">Users</p>
+                        </div>
+                        <div id="chat-div-users">
+                            <div id="chat-div-users-inside">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col col-2">
+    <div class="chat-div-titles">
+        <p class="chat-titles">Options</p>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock body %}
