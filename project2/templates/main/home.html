@@ -15,11 +15,16 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text" id="basic-addon1">@</span>
                         </div>
-                        <input type="text" name="username" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" autocomplete="off" autofocus>
+                        <input id="input-username" type="text" name="username" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" autocomplete="off" autofocus>
                     </div>
                     <input type="submit" class="btn btn-warning">
                 </form>
             </div>
         </div>
     </div>
+
+    <script>
+        // It gives priority to the input's focus instead of giving it to the alert message
+        document.querySelector('#input-username').focus();
+    </script>
 {% endblock body %}
