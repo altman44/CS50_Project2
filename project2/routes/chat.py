@@ -2,21 +2,17 @@ from application import app, session, users, socketio, emit, flash, render_templ
 from flask import jsonify
 from models.chat import *
 
-AllMessages = [
-    Message('nico', 'juan', 'Hola Juan'), 
-    Message('juan', 'nico', 'Hola Nico'), 
-    Message('nico', 'juan', 'soy nico'),
-    Message('nico', 'nico', 'Este es un mensaje conmigo mismo'),
-    Message('juan', 'nico', 'Ya se que sos nico')
-]
-
 @app.route('/chat', methods=['GET', 'POST'])
 def login():
-    # GET
-    if request.method == "GET":
+    try:
         if session['activeUser']:
             return render_template('logged/chat.html')
+    except KeyError:
+        print('error')
+        redirect('before_first_request')
 
+    # GET
+    if request.method == "GET":
         return redirect(url_for('index'))
 
     # POST
@@ -26,58 +22,77 @@ def login():
             flash("You must enter your username to login", 'danger')
             return redirect(url_for('index'))
 
-        try:
-            if username != session['username']:
-                i = 0
-                found = False
-                while i < len(users) and not found:
-                    if users[i] == session['username']:
-                        users.pop(i)
-                        found = True
-                    i += 1
-        except KeyError:
-            print('error')
-            redirect('before_first_request')
+        # try:
+        #     if username != session['username']:
+        #         userFound = chat.searchUser(session['username'])
+        #         if users[i] == session['username']:
+        #             chat.deleteUser()
+        # except KeyError:
+        #     print('error')
+        #     redirect('before_first_request')
 
-        if username not in users:
-            dataUser = User(username, username)
-            users.append(dataUser)
+        # if not users.searchUserByUsername(username):
+        users.appendUser(username)
+        chatCreated = users.appendChat([username, username])
+
+        print(chatCreated)
+        chatCreated.submitMessage(username, username, "Hola")
+        chatCreated.submitMessage(username, username, "Buenas")
 
         session['username'] = username
         session['activeUser'] = True
-        session['currentIdReceiver'] = None
+        session['currentUserReceiver'] = None
         return render_template('logged/chat.html')
-
 
 @socketio.on('fetch users')
 def fetchUsers():
     data = {}
     data['username'] = session['username']
-    data['users'] = users
+    data['users'] = users.getUsersUsernames()
+    # print(data)
     emit('users', data, broadcast=True)
-
 
 @socketio.on('submit message')
 def message(data):
-    if data['message']:
-        idSender = session['username']
-        idReceiver = session['currentIdReceiver']
-        message = data['message']
-        message = Message(idSender, idReceiver, message)
-        AllMessages.append(message)
-        emit('message submitted', message, broadcast=True)
+    print(data)
+    if data['message'] and data['usernameReceiver']:
+        submitted = False
+        dataMessage = {}
 
+        usernameReceiver = data['usernameReceiver']
+        message = data['message']
+        usernameSender = session['username']
+        usersChat = [usernameSender, usernameReceiver]
+        chatFound = users.searchChatByUsernames(usersChat)
+
+        if chatFound:
+            submitted = chatFound.submitMessage(usernameSender, usernameReceiver, message)
+        else:
+            newChat = users.appendChat(usersChat)
+            if newChat:
+                submitted = newChat.submitMessage(usernameSender, usernameReceiver, message)
+        
+        dataMessage['usernameSender'] = usernameSender
+        dataMessage['message'] = message
+        emit('message submitted', dataMessage, broadcast=True)
 
 @app.route('/fetchMessages', methods=['POST'])
 def fetchMessages():
-    idReceiver = request.form['idReceiver']
-    session['currentIdReceiver'] = idReceiver
-    obj = {}
-    messages = []
+    usernameSender = session['username']
+    usernameReceiver = request.form['usernameReceiver']
+    session['currentUsernameReceiver'] = usernameReceiver
 
-    for msg in AllMessages:
-        if (msg.idSender == session['username'] and msg.idReceiver == idReceiver) or (msg.idSender == idReceiver and msg.idReceiver == session['username']):
-            messages.append(msg.__dict__)
+    print('sender y receiver: ', usernameSender, usernameReceiver)
 
-    obj['messages'] = messages
-    return jsonify(obj)
+    usersChat = [usernameSender, usernameReceiver]
+    chat = users.searchChatByUsernames(usersChat)
+    chatSerialized = {}
+    if chat:
+        chatSerialized = chat.serialize()
+    print('chat: ', chatSerialized)
+    return jsonify(chatSerialized)
+
+@app.route('/searchCurrentUsername')
+def searchCurrentUsername():
+    print('Holaaaaaa')
+    return session['username']

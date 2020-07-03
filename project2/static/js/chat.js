@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  let currentUser;
 
   // Connect to websocket (in order to begin the communication in real time between the client and the server)
   const socket = io.connect(
@@ -7,27 +6,51 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   // When connected
-  socket.on("connect", () => {
+  socket.on("connect", function () {
     socket.emit("fetch users");
 
+    //const username = sessionStorage.getItem("username");
+    const getUsername = searchCurrentUsername();
+    getUsername.then(username => {
+      if (username) {
+        loadChatUser(username);
+      }
+    });
+
     // Configure Submit message button
-    document.querySelector("#btn-submit-msg").onclick = () => {
+    document.querySelector("#btn-submit-msg").onclick = (usernameReceiver) => {
       const message = document.querySelector("#input-message").value;
-      currentUser = true;
-      socket.emit("submit message", { message });
+      //let usernameReceiver = sessionStorage.getItem("usernameReceiver");
+      socket.emit("submit message", { message, usernameReceiver });
     };
   });
 
   socket.on("users", (data) => {
     sessionStorage.setItem("users", JSON.stringify(data.users));
+    // sessionStorage.setItem("username", data.username);
     loadUsers();
   });
 
   socket.on("message submitted", (data) => {
     // Show message sent by another user or the user itself
-    loadMessage(data.username, data.message, currentUser);
-    currentUser = false;
+    const getUsername = searchCurrentUsername();
+    getUsername.then(username => {
+      console.log('username: ', username);
+      loadMessage(data.usernameSender, data.message, data.usernameSender == username);    
+    })
   });
+
+  function searchCurrentUsername() {
+    const req = new XMLHttpRequest();
+    req.open('POST', '/searchCurrentUsername');
+    const response = new Promise((resolve, reject) => {
+      req.onload = () => {
+        console.log(req.responseText);
+        resolve('Hi');
+      }
+    })
+    return response
+  }
 
   function loadUsers() {
     const divUsers = document.querySelector("#chat-div-users-inside");
@@ -35,14 +58,15 @@ document.addEventListener("DOMContentLoaded", () => {
     let userTitle;
 
     divUsers.innerHTML = "";
-    JSON.parse(sessionStorage.getItem("users")).forEach(dataUser => {
+    console.log(sessionStorage)
+    JSON.parse(sessionStorage.getItem("users")).forEach(username => {
       divUser = document.createElement("div");
       divUser.setAttribute("class", "div-user");
       userTitle = document.createElement("p");
       userTitle.setAttribute("class", "p-user-title");
-      userTitle.innerHTML = dataUser.username;
+      userTitle.innerHTML = username;
       divUser.appendChild(userTitle);
-      divUser.addEventListener("click", () => loadChatUser(dataUser.id));
+      divUser.addEventListener("click", () => loadChatUser(username));
       divUsers.appendChild(divUser);
     });
   }
@@ -90,20 +114,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function loadChatUser(idReceiver) {
+  function loadChatUser(usernameReceiver) {
     resetChat();
-    const response = searchMessagesWith(idReceiver);
-    response.then(data => {
-      data.messages.forEach(messageData => {
-        loadMessage(
-          messageData.idSender,
-          messageData.message,
-          messageData.idReceiver == idReceiver
-        );
-      });
-    })
-    
-    document.querySelector("#chat-title-with-who").textContent = idReceiver;
+    const response = searchMessagesWith(usernameReceiver);
+    response.then((data) => {
+      if (data) {
+        if (data.messages) {
+          data.messages.forEach((messageData) => {
+            loadMessage(
+              messageData.usernameSender,
+              messageData.message,
+              messageData.usernameSender == sessionStorage.getItem('username')
+            );
+          });
+        }
+      }
+    });
+
+    document.querySelector(
+      "#chat-title-with-who"
+    ).textContent = usernameReceiver;
   }
 
   function resetChat() {
@@ -111,23 +141,28 @@ document.addEventListener("DOMContentLoaded", () => {
     divMessages.innerHTML = "";
   }
 
-  function searchMessagesWith(idReceiver) {
-
+  function searchMessagesWith(usernameReceiver) {
     const request = new XMLHttpRequest();
     request.open("POST", "/fetchMessages");
 
     let response = new Promise((resolve, reject) => {
       request.onload = () => {
         try {
-          resolve(JSON.parse(request.responseText));
+          console.log("request.responseText: ", request.responseText);
+          respText = request.responseText;
+          if (respText) {
+            resolve(JSON.parse(respText));
+          } else {
+            reject(null);
+          }
         } catch (e) {
-          reject(e)
+          reject(e);
         }
-      }
+      };
     });
 
     const dataToSend = new FormData();
-    dataToSend.append("idReceiver", idReceiver);
+    dataToSend.append("usernameReceiver", usernameReceiver);
     request.send(dataToSend);
     return response;
   }
@@ -136,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .querySelector("#input-message")
     .addEventListener("keypress", (event) => {
       if (event.keyCode == 13) {
-        document.querySelector("#btn-submit-msg").onclick();
+        document.querySelector("#btn-submit-msg").onclick(sessionStorage.getItem('username'));
       }
     });
 });
