@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   // Connect to websocket (in order to begin the communication in real time between the client and the server)
   const socket = io.connect(
     location.protocol + "//" + document.domain + ":" + location.port
@@ -8,20 +7,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // When connected
   socket.on("connect", function () {
     socket.emit("fetch users");
-
-    //const username = sessionStorage.getItem("username");
-    const getUsername = searchCurrentUsername();
-    getUsername.then(username => {
-      if (username) {
-        loadChatUser(username);
-      }
+    console.log('otra vez')
+    searchInSession('/searchUsername')
+      .then((username) => {
+        //console.log("username: ", username);
+        if (username) {
+          loadChatUser(username);
+        }
     });
 
     // Configure Submit message button
-    document.querySelector("#btn-submit-msg").onclick = (usernameReceiver) => {
+    document.querySelector("#btn-submit-msg").onclick = () => {
       const message = document.querySelector("#input-message").value;
-      //let usernameReceiver = sessionStorage.getItem("usernameReceiver");
-      socket.emit("submit message", { message, usernameReceiver });
+      socket.emit("submit message", { message });
     };
   });
 
@@ -33,23 +31,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
   socket.on("message submitted", (data) => {
     // Show message sent by another user or the user itself
-    const getUsername = searchCurrentUsername();
-    getUsername.then(username => {
-      console.log('username: ', username);
-      loadMessage(data.usernameSender, data.message, data.usernameSender == username);    
-    })
+    searchInSession('/searchUsername')
+      .then(username => {
+        searchInSession('/searchCurrentUsernameReceiver')
+          .then(currentUsernameReceiver => { 
+            console.log("DATOS:")
+            console.log("receptor actual: " + currentUsernameReceiver)
+            console.log("receptor: " + data.usernameReceiver)
+            console.log("emisor: " + data.usernameSender)
+            console.log("usuario actual: " + username)
+            if (currentUsernameReceiver == data.usernameReceiver) {
+              loadMessage(
+                data.usernameSender,
+                data.message,
+                data.usernameSender == username
+              );
+            }
+          });
+    });
   });
 
-  function searchCurrentUsername() {
+  function searchInSession(route) {
     const req = new XMLHttpRequest();
-    req.open('POST', '/searchCurrentUsername');
+    req.open("POST", route);
     const response = new Promise((resolve, reject) => {
       req.onload = () => {
-        console.log(req.responseText);
-        resolve('Hi');
-      }
-    })
-    return response
+        resolve(req.responseText);
+      };
+    });
+    req.send(null);
+    return response;
   }
 
   function loadUsers() {
@@ -58,8 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let userTitle;
 
     divUsers.innerHTML = "";
-    console.log(sessionStorage)
-    JSON.parse(sessionStorage.getItem("users")).forEach(username => {
+    console.log(sessionStorage);
+    JSON.parse(sessionStorage.getItem("users")).forEach((username) => {
       divUser = document.createElement("div");
       divUser.setAttribute("class", "div-user");
       userTitle = document.createElement("p");
@@ -120,12 +131,15 @@ document.addEventListener("DOMContentLoaded", () => {
     response.then((data) => {
       if (data) {
         if (data.messages) {
-          data.messages.forEach((messageData) => {
-            loadMessage(
-              messageData.usernameSender,
-              messageData.message,
-              messageData.usernameSender == sessionStorage.getItem('username')
-            );
+          searchInSession('/searchUsername')
+            .then(username => {
+              data.messages.forEach((messageData) => {
+                loadMessage(
+                  messageData.usernameSender,
+                  messageData.message,
+                  messageData.usernameSender == username
+                );
+              });
           });
         }
       }
@@ -147,16 +161,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let response = new Promise((resolve, reject) => {
       request.onload = () => {
-        try {
-          console.log("request.responseText: ", request.responseText);
-          respText = request.responseText;
-          if (respText) {
-            resolve(JSON.parse(respText));
-          } else {
-            reject(null);
-          }
-        } catch (e) {
-          reject(e);
+        console.log("request.responseText: ", request.responseText);
+        respText = request.responseText;
+        if (respText) {
+          resolve(JSON.parse(respText));
+        } else {
+          reject(null);
         }
       };
     });
@@ -171,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .querySelector("#input-message")
     .addEventListener("keypress", (event) => {
       if (event.keyCode == 13) {
-        document.querySelector("#btn-submit-msg").onclick(sessionStorage.getItem('username'));
+        document.querySelector("#btn-submit-msg").onclick();
       }
     });
 });

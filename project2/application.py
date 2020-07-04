@@ -22,6 +22,8 @@ users = Users()
 def before_first_request():
     session['activeUser'] = False
     session['username'] = None
+    session['currentUsernameReceiver'] = None
+    print(session)
     
 import routes.main
 import routes.chat
