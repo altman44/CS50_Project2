@@ -19,7 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Configure Submit message button
     document.querySelector("#btn-submit-msg").onclick = () => {
       const message = document.querySelector("#input-message").value;
-      socket.emit("submit message", { message });
+      searchInSession('/searchCurrentUsernameReceiver')
+        .then(currentUsernameReceiver => {
+          console.log("currentReceiver: ", currentUsernameReceiver)
+          socket.emit("submit message", { message, currentUsernameReceiver });
+        })
     };
   });
 
@@ -37,10 +41,10 @@ document.addEventListener("DOMContentLoaded", () => {
           .then(currentUsernameReceiver => { 
             console.log("DATOS:")
             console.log("receptor actual: " + currentUsernameReceiver)
-            console.log("receptor: " + data.usernameReceiver)
+            console.log("receptor del mensaje: " + data.usernameReceiver)
             console.log("emisor: " + data.usernameSender)
             console.log("usuario actual: " + username)
-            if (currentUsernameReceiver == data.usernameReceiver) {
+            if (currentUsernameReceiver == data.usernameSender || username == data.usernameSender) {
               loadMessage(
                 data.usernameSender,
                 data.message,
@@ -170,7 +174,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       };
     });
-
     const dataToSend = new FormData();
     dataToSend.append("usernameReceiver", usernameReceiver);
     request.send(dataToSend);

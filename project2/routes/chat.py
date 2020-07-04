@@ -36,12 +36,12 @@ def login():
             users.appendUser(username)
         chatCreated = users.appendChat([username, username])
 
-        chatCreated.submitMessage(username, username, "Hola")
-        chatCreated.submitMessage(username, username, "Buenas")
+        chatCreated.submitMessage(username, username, "Por este chat podés enviarte mensajes a vos mismo")
 
         session['username'] = username
         session['activeUser'] = True
-        session['currentUsernameReceiver'] = username
+        session['currentUsernameReceiver'] = ""
+        print('route chat: ', session)
         return render_template('logged/chat.html')
 
 @socketio.on('fetch users')
@@ -53,9 +53,12 @@ def fetchUsers():
 
 @socketio.on('submit message')
 def message(data):
-    print(session)
-    usernameReceiver = session['currentUsernameReceiver']
+    #print(session)
+    #usernameReceiver = session['currentUsernameReceiver']
+    usernameReceiver = data['currentUsernameReceiver']
     message = data['message']
+
+    print("Submitting msg: " + usernameReceiver)
 
     if message and usernameReceiver:
         submitted = False
@@ -100,4 +103,5 @@ def searchCurrentUsername():
 
 @app.route('/searchCurrentUsernameReceiver', methods=['POST'])
 def searchCurrentUsernameReceiver():
+    print('currentUsername searched: ', session['currentUsernameReceiver'])
     return session['currentUsernameReceiver']
