@@ -135,8 +135,8 @@ class Message():
 
     def serialize(self):
         return {
-            'usernameSender': self.__senderUsername,
-            'usernameReceiver': self.__receiverUsername,
+            'senderUsername': self.__senderUsername,
+            'receiverUsername': self.__receiverUsername,
             'message': self.__message
         }
 

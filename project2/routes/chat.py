@@ -5,7 +5,7 @@ from models.chat import *
 @app.route('/chat', methods=['GET', 'POST'])
 def login():
     sessionKeys = session.keys()
-    if 'activeUser' in sessionKeys and 'username' in sessionKeys and 'currentUsernameReceiver' in sessionKeys:
+    if 'activeUser' in sessionKeys and 'username' in sessionKeys and 'currentReceiverUsername' in sessionKeys:
         if session['activeUser']:
             return render_template('logged/chat.html')
     else:
@@ -39,7 +39,7 @@ def login():
 
         session['username'] = username
         session['activeUser'] = True
-        session['currentUsernameReceiver'] = ""
+        session['currentReceiverUsername'] = ""
         # print('route chat: ', session)
         return render_template('logged/chat.html')
 
@@ -53,7 +53,7 @@ def fetchUsers():
 @socketio.on('submit message')
 def message(data):
     #print(session)
-    #usernameReceiver = session['currentUsernameReceiver']
+    #usernameReceiver = session['currentReceiverUsername']
     receiverUsername = data['currentUsernameReceiver']
     message = data['message']
 
@@ -75,8 +75,8 @@ def message(data):
             if newChat:
                 submitted = newChat.submitMessage(senderUsername, receiverUsername, message)
         
-        dataMessage['usernameSender'] = senderUsername
-        dataMessage['usernameReceiver'] = receiverUsername
+        dataMessage['senderUsername'] = senderUsername
+        dataMessage['receiverUsername'] = receiverUsername
         dataMessage['message'] = message
         print(dataMessage)
         emit('message submitted', dataMessage, broadcast=True)
@@ -84,9 +84,9 @@ def message(data):
 @app.route('/fetchMessages', methods=['POST'])
 def fetchMessages():
     senderUsername = session['username']
-    receiverUsername = request.form['usernameReceiver']
+    receiverUsername = request.form['receiverUsername']
     # join_room(senderUsername)
-    session['currentUsernameReceiver'] = receiverUsername
+    session['currentReceiverUsername'] = receiverUsername
 
     usersChat = [senderUsername, receiverUsername]
     chat = users.searchChatByUsernames(usersChat)
@@ -101,7 +101,7 @@ def fetchMessages():
 def searchCurrentUsername():
     return session['username']
 
-@app.route('/searchCurrentUsernameReceiver', methods=['POST'])
+@app.route('/searchCurrentReceiverUsername', methods=['POST'])
 def searchCurrentUsernameReceiver():
     # print('currentUsername searched: ', session['currentUsernameReceiver'])
-    return session['currentUsernameReceiver']
+    return session['currentReceiverUsername']
