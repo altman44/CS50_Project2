@@ -1,11 +1,7 @@
 class Users():
     def __init__(self):
         self.__users = []
-        self.__cantUsers = 0
         self.__chats = []
-
-    def __getChatsLength(self):
-        return len(self.__chats)
 
     def getUsersUsernames(self):
         newArrWithUsernames = []
@@ -15,82 +11,89 @@ class Users():
 
     def appendUser(self, username):
         added = False
-        userFound = self.searchUserByUsername(username)
-        if not userFound:
-            userCreated = User(self.__cantUsers, username)
-            self.__cantUsers += 1
-            self.__users.append(userCreated)
+        foundUser = self.searchUserByUsername(username)
+        if not foundUser:
+            createdUser = User(len(self.__users), username)
+            self.__users.append(createdUser)
             added = True
         return added
 
     def deleteUser(self, username):
         deleted = False
-        userFound = self.searchUser(username)
-        if userFound:
-            self.__users.remove(userFound)
-            self.__cantUsers -= 1
+        foundUser = self.searchUser(username)
+        if foundUser:
+            self.__users.remove(foundUser)
             deleted = True
         return deleted
 
     # def searchUserById(self, id):
     #     i = 0
-    #     userFound = None
-    #     while i < (self.__users) and not userFound:
+    #     foundUser = None
+    #     while i < (self.__users) and not foundUser:
     #         currentUser = self.__users[i]
     #         if currentUser.getId() == id:
-    #             userFound = currentUser
+    #             foundUser = currentUser
     #         i += 1
-    #     return userFound
+    #     return foundUser
 
     def searchUserByUsername(self, username):
         i = 0
-        userFound = None
-        while i < len(self.__users) and not userFound:
+        foundUser = None
+        while i < len(self.__users) and not foundUser:
             currentUser = self.__users[i]
             if currentUser.getUsername() == username:
-                userFound = currentUser
+                foundUser = currentUser
             i += 1
-        return userFound
+        return foundUser
 
     def appendChat(self, usersUsername):
         chatUsers = []
-        chatCreated = None
+        createdChat = None
 
         if len(usersUsername) >= 2:
             for username in usersUsername:
-                userFound = self.searchUserByUsername(username)
-                if userFound:
-                    chatUsers.append(userFound)
+                foundUser = self.searchUserByUsername(username)
+                if foundUser:
+                    chatUsers.append(foundUser)
             if len(chatUsers) >= 2:
-                chatCreated = Chat(self.__getChatsLength(), chatUsers)
-                self.__chats.append(chatCreated)
+                createdChat = Chat(len(self.__chats), chatUsers)
+                self.__chats.append(createdChat)
 
-        return chatCreated
+        return createdChat
+
+    def addRoom(self, users):
+        added = False
+        if len(users) > 1:
+            foundRoom = self.searchRoom(users)
+            if not foundRoom:
+                newRoom = Room(users)
+                self.__rooms.append(newRoom)
+        return added
 
     def searchChatByUsernames(self, users):
         i = 0
-        chatFound = None
-        while i < len(self.__chats) and not chatFound:
+        foundChat = None
+        while i < len(self.__chats) and not foundChat:
             currentChat = self.__chats[i]
             if currentChat.sameUsers(users):
-                chatFound = currentChat
+                foundChat = currentChat
             i += 1 
-        return chatFound
+        return foundChat
 
     def serialize(self):
-        usersSerialized = []
-        chatsSerialized = []
+        serializedUsers = []
+        serializedChats = []
 
         for user in self.__users:
-            usersSerialized.append(user.serialize())
+            serializedUsers.append(user.serialize())
 
         for chat in self.__chats:
-            chatsSerialized.append(chat.serialize())
+            serializedChats.append(chat.serialize())
         
         return {
-            'users': usersSerialized,
+            'users': serializedUsers,
             'cantUsers': self.__cantUsers,
-            'chats': chatsSerialized
+            'chats': serializedChats
         }
 
 class User():
@@ -98,11 +101,6 @@ class User():
         self.__id = id
         self.__username = username
         self.__chatsIds = []
-        # self.__messages = []
-
-    # def submitMessage(self, usernameReceiver, message):
-    #     msg = Message(self.__username, usernameReceiver, message)
-    #     self.__messages.append(msg.__dict__)
 
     def getId(self):
         return self.__id
@@ -120,31 +118,25 @@ class User():
             'chatsIds': self.__chatsIds
         }
 
-    # def getMessages(self):
-    #     newArrWithMsgs = []
-    #     for msg in self.__messages:
-    #         newArrWithMsgs.append(msg.__dict__)
-    #     return newArrWithMsgs
-
 class Message():
-    def __init__(self, usernameSender, usernameReceiver, message):
-        self.__usernameSender = usernameSender
-        self.__usernameReceiver = usernameReceiver
+    def __init__(self, senderUsername, receiverUsername, message):
+        self.__senderUsername = senderUsername
+        self.__receiverUsername = receiverUsername
         self.__message = message
 
     def getUsernameSender(self):
-        return self.__usernameSender
+        return self.__senderUsername
     
     def getUsernameReceiver(self):
-        return self.__usernameReceiver
+        return self.__receiverUsername
 
     def getMessage(self):
         return self.__message
 
     def serialize(self):
         return {
-            'usernameSender': self.__usernameSender,
-            'usernameReceiver': self.__usernameReceiver,
+            'usernameSender': self.__senderUsername,
+            'usernameReceiver': self.__receiverUsername,
             'message': self.__message
         }
 
@@ -164,10 +156,10 @@ class Chat():
     def setMessages(self, messages):
         self.__messages = messages
 
-    def submitMessage(self, usernameSender, usernameReceiver, message):
+    def submitMessage(self, senderUsername, receiverUsername, message):
         submitted = False
-        if usernameSender and usernameReceiver and message:
-            msg = Message(usernameSender, usernameReceiver, message)
+        if senderUsername and receiverUsername and message:
+            msg = Message(senderUsername, receiverUsername, message)
             self.__messages.append(msg)
             submitted = True
         return submitted
@@ -177,32 +169,32 @@ class Chat():
         j = 0
         counter = 0
         equals = True
-        indexesFound = []
+        foundIndices = []
 
         while i < len(users) and equals:
             equals = False
             while j < len(self.__users) and not equals:
-                if j not in indexesFound and users[i] == self.__users[j].getUsername():
+                if j not in foundIndices and users[i] == self.__users[j].getUsername():
                     counter += 1
                     equals = True
-                    indexesFound.append(j)
+                    foundIndices.append(j)
                 j += 1
             j = 0
             i += 1
         return counter == len(self.__users)
 
     def serialize(self):
-        messagesSerialized = []
-        usersSerialized = []
+        serializedMessages = []
+        serializedUsers = []
 
         for msg in self.__messages:
-            messagesSerialized.append(msg.serialize())
+            serializedMessages.append(msg.serialize())
 
         for user in self.__users:
-            usersSerialized.append(user.serialize())
+            serializedUsers.append(user.serialize())
 
         return {
             'id': self.__id,
-            'users': usersSerialized,
-            'messages': messagesSerialized
+            'users': serializedUsers,
+            'messages': serializedMessages
         }

@@ -1,11 +1,10 @@
-from application import app, session, users, socketio, emit, flash, render_template, request, redirect, url_for
+from application import app, session, users, socketio, emit, flash, render_template, request, redirect, url_for, join_room
 from flask import jsonify
 from models.chat import *
 
 @app.route('/chat', methods=['GET', 'POST'])
 def login():
     sessionKeys = session.keys()
-
     if 'activeUser' in sessionKeys and 'username' in sessionKeys and 'currentUsernameReceiver' in sessionKeys:
         if session['activeUser']:
             return render_template('logged/chat.html')
@@ -86,6 +85,7 @@ def message(data):
 def fetchMessages():
     usernameSender = session['username']
     usernameReceiver = request.form['usernameReceiver']
+    join_room(usernameSender)
     session['currentUsernameReceiver'] = usernameReceiver
 
     usersChat = [usernameSender, usernameReceiver]

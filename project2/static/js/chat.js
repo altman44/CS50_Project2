@@ -38,13 +38,15 @@ document.addEventListener("DOMContentLoaded", () => {
     searchInSession('/searchUsername')
       .then(username => {
         searchInSession('/searchCurrentUsernameReceiver')
-          .then(currentUsernameReceiver => { 
+          .then(currentUsernameReceiver => {
+            const receiver = data.usernameReceiver;
+            const sender = data.usernameSender;
             console.log("DATOS:")
             console.log("receptor actual: " + currentUsernameReceiver)
-            console.log("receptor del mensaje: " + data.usernameReceiver)
-            console.log("emisor: " + data.usernameSender)
+            console.log("receptor del mensaje: " + receiver);
+            console.log("emisor: " + sender);
             console.log("usuario actual: " + username)
-            if (currentUsernameReceiver == data.usernameSender || username == data.usernameSender) {
+            if (username == sender || (username == receiver && currentUsernameReceiver == sender)) {
               loadMessage(
                 data.usernameSender,
                 data.message,
