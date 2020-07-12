@@ -9,7 +9,7 @@ class Users():
             newArrWithUsernames.append(user.getUsername())
         return newArrWithUsernames
 
-    def appendUser(self, username):
+    def addUser(self, username):
         added = False
         foundUser = self.searchUserByUsername(username)
         if not foundUser:
@@ -46,12 +46,12 @@ class Users():
             i += 1
         return foundUser
 
-    def appendChat(self, usersUsername):
+    def addChat(self, usersUsernames):
         chatUsers = []
         createdChat = None
 
-        if len(usersUsername) >= 2:
-            for username in usersUsername:
+        if len(usersUsernames) >= 2:
+            for username in usersUsernames:
                 foundUser = self.searchUserByUsername(username)
                 if foundUser:
                     chatUsers.append(foundUser)
