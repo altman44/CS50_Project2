@@ -10,31 +10,20 @@ class Users():
         return newArrWithUsernames
 
     def addUser(self, username):
-        added = False
+        createdUser = None
         foundUser = self.searchUserByUsername(username)
         if not foundUser:
             createdUser = User(len(self.__users), username)
             self.__users.append(createdUser)
-            added = True
-        return added
+        return createdUser
 
     def deleteUser(self, username):
-        deleted = False
+        deletedUser = None
         foundUser = self.searchUser(username)
         if foundUser:
             self.__users.remove(foundUser)
-            deleted = True
-        return deleted
-
-    # def searchUserById(self, id):
-    #     i = 0
-    #     foundUser = None
-    #     while i < (self.__users) and not foundUser:
-    #         currentUser = self.__users[i]
-    #         if currentUser.getId() == id:
-    #             foundUser = currentUser
-    #         i += 1
-    #     return foundUser
+            deletedUser = foundUser
+        return deletedUser
 
     def searchUserByUsername(self, username):
         i = 0
@@ -61,24 +50,16 @@ class Users():
 
         return createdChat
 
-    def addRoom(self, users):
-        added = False
-        if len(users) > 1:
-            foundRoom = self.searchRoom(users)
-            if not foundRoom:
-                newRoom = Room(users)
-                self.__rooms.append(newRoom)
-        return added
-
-    def searchChatByUsernames(self, users):
-        i = 0
-        foundChat = None
-        while i < len(self.__chats) and not foundChat:
-            currentChat = self.__chats[i]
-            if currentChat.sameUsers(users):
-                foundChat = currentChat
-            i += 1 
-        return foundChat
+    # Delete (maybe)
+    # def searchChatByUsernames(self, users):
+    #     i = 0
+    #     foundChat = None
+    #     while i < len(self.__chats) and not foundChat:
+    #         currentChat = self.__chats[i]
+    #         if currentChat.sameUsers(users):
+    #             foundChat = currentChat
+    #         i += 1 
+    #     return foundChat
 
     def serialize(self):
         serializedUsers = []
@@ -100,7 +81,8 @@ class User():
     def __init__(self, id, username):
         self.__id = id
         self.__username = username
-        self.__chatsIds = []
+        self.__chats = []
+        # self.__chatsIds = []
 
     def getId(self):
         return self.__id
@@ -119,16 +101,16 @@ class User():
         }
 
 class Message():
-    def __init__(self, senderUsername, receiverUsername, message):
+    def __init__(self, senderUsername, message):
         self.__senderUsername = senderUsername
-        self.__receiverUsername = receiverUsername
+        # self.__receiverUsername = receiverUsername
         self.__message = message
 
     def getUsernameSender(self):
         return self.__senderUsername
     
-    def getUsernameReceiver(self):
-        return self.__receiverUsername
+    # def getUsernameReceiver(self):
+    #     return self.__receiverUsername
 
     def getMessage(self):
         return self.__message
@@ -136,7 +118,7 @@ class Message():
     def serialize(self):
         return {
             'senderUsername': self.__senderUsername,
-            'receiverUsername': self.__receiverUsername,
+            # 'receiverUsername': self.__receiverUsername,
             'message': self.__message
         }
 
@@ -156,32 +138,32 @@ class Chat():
     def setMessages(self, messages):
         self.__messages = messages
 
-    def submitMessage(self, senderUsername, receiverUsername, message):
-        submitted = False
-        if senderUsername and receiverUsername and message:
-            msg = Message(senderUsername, receiverUsername, message)
-            self.__messages.append(msg)
-            submitted = True
-        return submitted
+    def submitMessage(self, senderUsername, message):
+        createdMsg = None
+        if senderUsername and message:
+            createdMsg = Message(senderUsername, message)
+            self.__messages.append(createdMsg)
+        return createdMsg
 
-    def sameUsers(self, users):
-        i = 0
-        j = 0
-        counter = 0
-        equals = True
-        foundIndices = []
+    # Delete (maybe)
+    # def sameUsers(self, users):
+    #     i = 0
+    #     j = 0
+    #     counter = 0
+    #     equals = True
+    #     foundIndices = []
 
-        while i < len(users) and equals:
-            equals = False
-            while j < len(self.__users) and not equals:
-                if j not in foundIndices and users[i] == self.__users[j].getUsername():
-                    counter += 1
-                    equals = True
-                    foundIndices.append(j)
-                j += 1
-            j = 0
-            i += 1
-        return counter == len(self.__users)
+    #     while i < len(users) and equals:
+    #         equals = False
+    #         while j < len(self.__users) and not equals:
+    #             if j not in foundIndices and users[i] == self.__users[j].getUsername():
+    #                 counter += 1
+    #                 equals = True
+    #                 foundIndices.append(j)
+    #             j += 1
+    #         j = 0
+    #         i += 1
+    #     return counter == len(self.__users)
 
     def serialize(self):
         serializedMessages = []
