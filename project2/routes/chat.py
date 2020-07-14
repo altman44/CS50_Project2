@@ -27,11 +27,11 @@ def login():
             user = flat.addUser(username)
 
         createdChat = flat.addChat([user])
-        user.addChat(createdChat)
+        user.addContact(user, createdChat)
+        # user.addChat(createdChat)
         createdChat.submitMessage(username, "Por este chat podés enviarte mensajes a vos mismo")
 
         session['user'] = user
-        user.addContact(user)
         session['activeUser'] = True
         session['currentReceiverUsername'] = ""
         return render_template('logged/chat.html')

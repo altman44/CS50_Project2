@@ -98,31 +98,13 @@ class User():
         for contact in self.__contacts:
             newContactData = {
                 'username': contact.getUsername(),
-                'chatId': self.searchChatIdWith(contact)
+                'chatId': contact.getChatId()
             }
             contacts.append(newContactData)
         return contacts
 
-    def searchChatIdWith(self, contact):
-        i = 0
-        foundContact = None
-        chatId = -1
-
-        while i < len(self.__chats) and not foundContact:
-            currentChat = self.__chats[i]
-            if currentChat.search
-        return chatId
-
     def addChat(self, chat):
         self.__chats.append(chat)
-
-    def addContact(self, contactId, chatId):
-        added = False
-        if contactId is not None and chatId is not None:
-            newContact = Contact(contactId, chatId)
-            self.__contacts.append(newContact)
-            added = True
-        return added
 
     def searchChat(self, chatId):
         i = 0
@@ -135,6 +117,25 @@ class User():
             i += 1
         return foundChat
 
+    def addContact(self, contact, chat):
+        newContact = None
+        if contact and chat:
+            newContact = Contact(contact, chat)
+            self.__contacts.append(newContact)
+            self.addChat(chat)
+        return newContact
+
+    def searchContact(self, username):
+        i = 0
+        foundContact = None
+
+        while i < len(self.__contacts) and not foundContact:
+            currentContact = self.__contacts[i]
+            if currentContact.getUsername() == username:
+                foundContact = currentContact
+            i += 1
+        return foundContact
+
     def serialize(self):
         return {
             'id': self.__id,
@@ -143,15 +144,29 @@ class User():
         }
 
 class Contact():
-    def __init__(self, id, chatId):
-        self.__id = id
-        self.__chatId = chatId
+    def __init__(self, user, chat):
+        self.__setUser(user)
+        self.__chat = chat
     
-    def getId(self):
-        return self.__id
+    def __setUser(self, user):
+        if user:
+            self.__user = user
+
+    def __setChatId(self, chat):
+        if chat:
+            self.__chat = chat
+
+    def getUser(self):
+        return self.__user
     
-    def getChatId(self):
-        return self.__chatId
+    def getChat(self):
+        return self.__chat
+
+    def serialize(self):
+        return {
+            'user': self.__user.serialize(),
+            'chat': self.__chat.serialize()
+        }
 
 class Message():
     def __init__(self, senderUsername, message):
