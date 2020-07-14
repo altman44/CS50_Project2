@@ -6,8 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // When connected
     socket.on('connect', function () {
-        socket.emit('fetch users');
-        console.log('otra vez');
+        socket.emit('fetch contacts');
         searchInSession('/searchUsername').then((username) => {
             if (username) {
                 loadChatUser(username);
@@ -29,8 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     });
 
-    socket.on('users', (data) => {
-        sessionStorage.setItem('users', JSON.stringify(data.users));
+    socket.on('contacts', (data) => {
+        sessionStorage.setItem('contacts', JSON.stringify(data.contacts));
         // sessionStorage.setItem("username", data.username);
         loadUsers();
     });

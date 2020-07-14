@@ -1,4 +1,4 @@
-class Users():
+class Flat():
     def __init__(self):
         self.__users = []
         self.__chats = []
@@ -81,8 +81,15 @@ class User():
     def __init__(self, id, username):
         self.__id = id
         self.__username = username
-        self.__chats = []
+        self.__setChats([])
+        self.__setContacts([])
         # self.__chatsIds = []
+
+    def __setChats(self, chats):
+        self.__chats = chats
+
+    def __setContacts(self, contacts):
+        self.__contacts = contacts
 
     def getId(self):
         return self.__id
@@ -90,8 +97,18 @@ class User():
     def getUsername(self):
         return self.__username
 
-    def appendChat(self, idChat):
-        self.__chatsIds.append(idChat)
+    def getContacts(self):
+        return self.__contacts
+
+    def addChat(self, chat):
+        self.__chats.append(chat)
+
+    def addContact(self, contact):
+        added = False
+        if contact:
+            self.__contacts.append(contact)
+            added = True
+        return added
 
     def serialize(self):
         return {
