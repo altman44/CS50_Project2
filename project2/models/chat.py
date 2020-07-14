@@ -35,31 +35,18 @@ class Flat():
             i += 1
         return foundUser
 
-    def addChat(self, usersUsernames):
+    def addChat(self, users):
         chatUsers = []
         createdChat = None
 
-        if len(usersUsernames) >= 2:
-            for username in usersUsernames:
-                foundUser = self.searchUserByUsername(username)
-                if foundUser:
-                    chatUsers.append(foundUser)
-            if len(chatUsers) >= 2:
-                createdChat = Chat(len(self.__chats), chatUsers)
-                self.__chats.append(createdChat)
-
+        if len(users) >= 1:
+            # for user in users:
+                # foundUser = self.searchUserByUsername(username)
+                # chatUsers.append(foundUser)
+            # if len(chatUsers) >= 2:
+            createdChat = Chat(len(self.__chats), users)
+            self.__chats.append(createdChat)
         return createdChat
-
-    # Delete (maybe)
-    # def searchChatByUsernames(self, users):
-    #     i = 0
-    #     foundChat = None
-    #     while i < len(self.__chats) and not foundChat:
-    #         currentChat = self.__chats[i]
-    #         if currentChat.sameUsers(users):
-    #             foundChat = currentChat
-    #         i += 1 
-    #     return foundChat
 
     def serialize(self):
         serializedUsers = []
@@ -80,10 +67,13 @@ class Flat():
 class User():
     def __init__(self, id, username):
         self.__id = id
-        self.__username = username
+        self.__setUsername(username)
         self.__setChats([])
         self.__setContacts([])
-        # self.__chatsIds = []
+
+    def __setUsername(self, username):
+        if username:
+            self.__username = username            
 
     def __setChats(self, chats):
         self.__chats = chats
@@ -97,18 +87,53 @@ class User():
     def getUsername(self):
         return self.__username
 
+    def getChats(self):
+        return self.__chats
+
     def getContacts(self):
         return self.__contacts
+
+    def getContacts(self):
+        contacts = []
+        for contact in self.__contacts:
+            newContactData = {
+                'username': contact.getUsername(),
+                'chatId': self.searchChatIdWith(contact)
+            }
+            contacts.append(newContactData)
+        return contacts
+
+    def searchChatIdWith(self, contact):
+        i = 0
+        foundContact = None
+        chatId = -1
+
+        while i < len(self.__chats) and not foundContact:
+            currentChat = self.__chats[i]
+            if currentChat.search
+        return chatId
 
     def addChat(self, chat):
         self.__chats.append(chat)
 
-    def addContact(self, contact):
+    def addContact(self, contactId, chatId):
         added = False
-        if contact:
-            self.__contacts.append(contact)
+        if contactId is not None and chatId is not None:
+            newContact = Contact(contactId, chatId)
+            self.__contacts.append(newContact)
             added = True
         return added
+
+    def searchChat(self, chatId):
+        i = 0
+        foundChat = None
+
+        while i < len(self.__chats) and not foundChat:
+            currentChat = self.__chats[i]
+            if (currentChat.getId() == chatId):
+                foundChat = currentChat
+            i += 1
+        return foundChat
 
     def serialize(self):
         return {
@@ -117,17 +142,24 @@ class User():
             'chatsIds': self.__chatsIds
         }
 
+class Contact():
+    def __init__(self, id, chatId):
+        self.__id = id
+        self.__chatId = chatId
+    
+    def getId(self):
+        return self.__id
+    
+    def getChatId(self):
+        return self.__chatId
+
 class Message():
     def __init__(self, senderUsername, message):
         self.__senderUsername = senderUsername
-        # self.__receiverUsername = receiverUsername
         self.__message = message
 
     def getUsernameSender(self):
         return self.__senderUsername
-    
-    # def getUsernameReceiver(self):
-    #     return self.__receiverUsername
 
     def getMessage(self):
         return self.__message
@@ -135,7 +167,6 @@ class Message():
     def serialize(self):
         return {
             'senderUsername': self.__senderUsername,
-            # 'receiverUsername': self.__receiverUsername,
             'message': self.__message
         }
 
@@ -161,26 +192,6 @@ class Chat():
             createdMsg = Message(senderUsername, message)
             self.__messages.append(createdMsg)
         return createdMsg
-
-    # Delete (maybe)
-    # def sameUsers(self, users):
-    #     i = 0
-    #     j = 0
-    #     counter = 0
-    #     equals = True
-    #     foundIndices = []
-
-    #     while i < len(users) and equals:
-    #         equals = False
-    #         while j < len(self.__users) and not equals:
-    #             if j not in foundIndices and users[i] == self.__users[j].getUsername():
-    #                 counter += 1
-    #                 equals = True
-    #                 foundIndices.append(j)
-    #             j += 1
-    #         j = 0
-    #         i += 1
-    #     return counter == len(self.__users)
 
     def serialize(self):
         serializedMessages = []

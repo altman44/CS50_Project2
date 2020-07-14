@@ -1,4 +1,4 @@
-from application import app, session, users, flash, render_template, request, redirect, url_for
+from application import app, session, flat, flash, render_template, request, redirect, url_for
 
 @app.route('/')
 @app.route('/login')
@@ -8,7 +8,7 @@ from application import app, session, users, flash, render_template, request, re
 def index():
     print(session)
     try:
-        if session['activeUser']:
+        if session['activeUser'] and session['user']:
             return redirect(url_for('login'))
     except KeyError:
         redirect('before_first_request')
@@ -18,13 +18,5 @@ def index():
 @app.route('/logout', methods=['GET', "POST"])
 def logout():
     session['activeUser'] = False
-    i = 0
-    found = False
-    while i < len(users) and not found:
-        if users[i] == session['username']:
-            users.pop(i)
-            found = True
-        i += 1
-    session['username'] = None
-
+    session['user'] = None
     return redirect(url_for('index'))

@@ -5,7 +5,7 @@ from models.chat import *
 @app.route('/chat', methods=['GET', 'POST'])
 def login():
     sessionKeys = session.keys()
-    if 'activeUser' in sessionKeys and 'username' in sessionKeys and 'currentReceiverUsername' in sessionKeys:
+    if 'activeUser' in sessionKeys and 'user' in sessionKeys and 'currentChatId' in sessionKeys:
         if session['activeUser']:
             return render_template('logged/chat.html')
     else:
@@ -26,8 +26,9 @@ def login():
         if not user:
             user = flat.addUser(username)
 
-        createdChat = flat.addChat([username, username])
-        createdChat.submitMessage(username, username, "Por este chat podés enviarte mensajes a vos mismo")
+        createdChat = flat.addChat([user])
+        user.addChat(createdChat)
+        createdChat.submitMessage(username, "Por este chat podés enviarte mensajes a vos mismo")
 
         session['user'] = user
         user.addContact(user)
@@ -43,61 +44,66 @@ def fetchUsers():
     data['contacts'] = session['user'].getContacts()
     emit('contacts', data, broadcast=True)
 
-@socketio.on('submit message')
-def message(data):
-    #print(session)
-    #usernameReceiver = session['currentReceiverUsername']
-    # receiverUsername = data['currentUsernameReceiver']
-    chatId = data['chatId']
-    message = data['message']
-
-    print("Submitting msg: " + receiverUsername)
-
-    currentChat = session['user'].searchChat(chatId)
-
-    if message and receiverUsername:
-        submitted = False
-        dataMessage = {}
-
-        senderUsername = session['username']
-        usersChat = [senderUsername, receiverUsername]
-        print(f"sender: {senderUsername} y receiver: {receiverUsername}")
-        chatFound = flat.searchChatByUsernames(usersChat)
-
-        if chatFound:
-            submitted = chatFound.submitMessage(senderUsername, receiverUsername, message)
-        else:
-            newChat = flat.addChat(usersChat)
-            if newChat:
-                submitted = newChat.submitMessage(senderUsername, receiverUsername, message)
-        
-        dataMessage['senderUsername'] = senderUsername
-        dataMessage['receiverUsername'] = receiverUsername
-        dataMessage['message'] = message
-        print(dataMessage)
-        emit('message submitted', dataMessage, broadcast=True)
-
 @app.route('/fetchMessages', methods=['POST'])
 def fetchMessages():
-    senderUsername = session['username']
-    receiverUsername = request.form['receiverUsername']
-    # join_room(senderUsername)
-    session['currentReceiverUsername'] = receiverUsername
+    chatId = request.form['chatId']
+    print("chatId: ", chatId)
+    currentChat = session['user'].searchChat(chatId)
+    if currentChat:
+        join_room(chatId)
+        session['currentChatId'] = chatId
+        data = {
+            'username': session['user'].getUsername(),
+            'chat': currentChat.serialize()
+        }
+        print('chat: ', data)
+        return jsonify(data)
+    return {}
 
-    usersChat = [senderUsername, receiverUsername]
-    chat = flat.searchChatByUsernames(usersChat)
-    serializedChat = {}
-    if chat:
-        serializedChat = chat.serialize()
-    # print(session)
-    print('chat: ', serializedChat)
-    return jsonify(serializedChat)
+@socketio.on('submit message')
+def message(data):
+    chatId = session['currentChatId']
+    message = data['message']
+
+    if message:
+        currentChat = session['user'].searchChat(chatId)
+        if currentChat:
+            senderUsername = session['user'].getUsername()
+            dataMessage = {
+                "sender": senderUsername,
+                'message': message,
+                'username': session['user'].getUsername()
+            }
+            currentChat.submitMessage(senderUsername, message)
+            emit('message submitted', dataMessage, room=chatId)
+
+    # if message and receiverUsername:
+    #     submitted = False
+    #     dataMessage = {}
+
+    #     senderUsername = session['username']
+    #     usersChat = [senderUsername, receiverUsername]
+    #     print(f"sender: {senderUsername} y receiver: {receiverUsername}")
+    #     chatFound = flat.searchChatByUsernames(usersChat)
+
+    #     if chatFound:
+    #         submitted = chatFound.submitMessage(senderUsername, receiverUsername, message)
+    #     else:
+    #         newChat = flat.addChat(usersChat)
+    #         if newChat:
+    #             submitted = newChat.submitMessage(senderUsername, receiverUsername, message)
+        
+    #     dataMessage['senderUsername'] = senderUsername
+    #     dataMessage['receiverUsername'] = receiverUsername
+    #     dataMessage['message'] = message
+    #     print(dataMessage)
+    #     emit('message submitted', dataMessage, broadcast=True)
 
 @app.route('/searchUsername', methods=['POST'])
 def searchCurrentUsername():
-    return session['username']
+    return session['user'].getUsername()
 
-@app.route('/searchCurrentReceiverUsername', methods=['POST'])
-def searchCurrentUsernameReceiver():
-    # print('currentUsername searched: ', session['currentUsernameReceiver'])
-    return session['currentReceiverUsername']
+# @app.route('/searchCurrentReceiverUsername', methods=['POST'])
+# def searchCurrentUsernameReceiver():
+#     # print('currentUsername searched: ', session['currentUsernameReceiver'])
+#     return session['currentReceiverUsername']

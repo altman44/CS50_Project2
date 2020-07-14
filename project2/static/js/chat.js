@@ -16,48 +16,46 @@ document.addEventListener('DOMContentLoaded', () => {
         // Configure Submit message button
         document.querySelector('#btn-submit-msg').onclick = () => {
             const message = document.querySelector('#input-message').value;
-            searchInSession('/searchCurrentReceiverUsername').then(
-                (currentReceiverUsername) => {
-                    console.log('currentReceiver: ', currentReceiverUsername);
+            //searchInSession('/searchCurrentReceiverUsername').then(
+                //(currentReceiverUsername) => {
                     socket.emit('submit message', {
                         message,
-                        currentReceiverUsername,
                     });
-                }
-            );
+                //}
+            //);
         };
     });
 
     socket.on('contacts', (data) => {
         sessionStorage.setItem('contacts', JSON.stringify(data.contacts));
-        // sessionStorage.setItem("username", data.username);
         loadUsers();
     });
 
     socket.on('message submitted', (data) => {
         // Show message sent by another user or the user itself
-        searchInSession('/searchUsername').then((username) => {
-            searchInSession('/searchCurrentReceiverUsername').then(
-                (currentReceiverUsername) => {
-                    const receiver = data.receiverUsername;
+        
+        //searchInSession('/searchUsername').then((username) => {
+            //searchInSession('/searchCurrentReceiverUsername').then(
+                //(currentReceiverUsername) => {
+                    //const receiver = data.receiverUsername;
                     const sender = data.senderUsername;
-                    console.log('DATOS:');
-                    console.log('receptor actual: ' + currentReceiverUsername);
-                    console.log('receptor del mensaje: ' + receiver);
-                    console.log('emisor: ' + sender);
-                    console.log('usuario actual: ' + username);
+                    // console.log('DATOS:');
+                    // console.log('receptor actual: ' + currentReceiverUsername);
+                    // console.log('receptor del mensaje: ' + receiver);
+                    // console.log('emisor: ' + sender);
+                    // console.log('usuario actual: ' + username);
 
                     // prettier-ignore
-                    if (username == sender || (username == receiver && currentReceiverUsername == sender)) {
+                    //if (username == sender || (username == receiver && currentReceiverUsername == sender)) {
                         loadMessage(
                             data.senderUsername,
                             data.message,
-                            data.senderUsername == username
+                            data.senderUsername == data.username
                         );
-                    }
-                }
-            );
-        });
+                    //}
+                //}
+            //);
+        //});
     });
 
     function searchInSession(route) {
@@ -79,14 +77,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         divUsers.innerHTML = '';
         console.log(sessionStorage);
-        JSON.parse(sessionStorage.getItem('users')).forEach((username) => {
+        const contacts = JSON.parse(sessionStorage.getItem('contacts'));
+        contacts.forEach(contact => {
+            contact = JSON.parse(contact);
             divUser = document.createElement('div');
             divUser.setAttribute('class', 'div-user');
             userTitle = document.createElement('p');
             userTitle.setAttribute('class', 'p-user-title');
-            userTitle.innerHTML = username;
+            userTitle.innerHTML = contact.username;
             divUser.appendChild(userTitle);
-            divUser.addEventListener('click', () => loadChatUser(username));
+            divUser.addEventListener('click', () => loadChatUser(contact.chatId));
             divUsers.appendChild(divUser);
         });
     }
@@ -134,26 +134,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function loadChatUser(receiverUsername) {
+    function loadChatUser(chatId) {
         resetChat();
-        const response = searchMessagesWith(receiverUsername);
+        // prettier-ignore
+        const response = searchMessagesWith(chatId);
         response.then((data) => {
             if (data) {
-                if (data.messages) {
-                    searchInSession('/searchUsername').then((username) => {
-                        data.messages.forEach((messageData) => {
-                            loadMessage(
-                                messageData.senderUsername,
-                                messageData.message,
-                                messageData.senderUsername == username
-                            );
-                        });
-                    });
+                document.querySelector('#chat-title-with-who').textContent = data.username;
+                console.log('data', data)
+                if (data.chat) {
+                    const messages = data.chat.messages;
+                    if (messages) {
+                        //searchInSession('/searchUsername').then((username) => {
+                            messages.forEach((messageData) => {
+                                loadMessage(
+                                    messageData.senderUsername,
+                                    messageData.message,
+                                    messageData.senderUsername == username
+                                );
+                            });
+                        // });
+                    }
                 }
             }
         });
-        // prettier-ignore
-        document.querySelector('#chat-title-with-who').textContent = receiverUsername;
     }
 
     function resetChat() {
@@ -161,13 +165,13 @@ document.addEventListener('DOMContentLoaded', () => {
         divMessages.innerHTML = '';
     }
 
-    function searchMessagesWith(receiverUsername) {
+    function searchMessagesWith(chatId) {
         const request = new XMLHttpRequest();
         request.open('POST', '/fetchMessages');
 
         let response = new Promise((resolve, reject) => {
             request.onload = () => {
-                console.log('request.responseText: ', request.responseText);
+                // console.log('request.responseText: ', request.responseText);
                 respText = request.responseText;
                 if (respText) {
                     resolve(JSON.parse(respText));
@@ -177,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
         const dataToSend = new FormData();
-        dataToSend.append('receiverUsername', receiverUsername);
+        dataToSend.append('chatId', chatId);
         request.send(dataToSend);
         return response;
     }
