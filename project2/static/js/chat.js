@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#btn-submit-msg').onclick = () => {
             const message = document.querySelector('#input-message').value;
             //searchInSession('/searchCurrentReceiverUsername').then(
-                //(currentReceiverUsername) => {
-                    socket.emit('submit message', {
-                        message,
-                    });
-                //}
+            //(currentReceiverUsername) => {
+            socket.emit('submit message', {
+                message,
+            });
+            //}
             //);
         };
     });
@@ -33,28 +33,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('message submitted', (data) => {
         // Show message sent by another user or the user itself
-        
-        //searchInSession('/searchUsername').then((username) => {
-            //searchInSession('/searchCurrentReceiverUsername').then(
-                //(currentReceiverUsername) => {
-                    //const receiver = data.receiverUsername;
-                    const sender = data.senderUsername;
-                    // console.log('DATOS:');
-                    // console.log('receptor actual: ' + currentReceiverUsername);
-                    // console.log('receptor del mensaje: ' + receiver);
-                    // console.log('emisor: ' + sender);
-                    // console.log('usuario actual: ' + username);
 
-                    // prettier-ignore
-                    //if (username == sender || (username == receiver && currentReceiverUsername == sender)) {
-                        loadMessage(
+        //searchInSession('/searchUsername').then((username) => {
+        //searchInSession('/searchCurrentReceiverUsername').then(
+        //(currentReceiverUsername) => {
+        //const receiver = data.receiverUsername;
+        const sender = data.senderUsername;
+        // console.log('DATOS:');
+        // console.log('receptor actual: ' + currentReceiverUsername);
+        // console.log('receptor del mensaje: ' + receiver);
+        // console.log('emisor: ' + sender);
+        // console.log('usuario actual: ' + username);
+
+        // prettier-ignore
+        //if (username == sender || (username == receiver && currentReceiverUsername == sender)) {
+        loadMessage(
                             data.senderUsername,
                             data.message,
                             data.senderUsername == data.username
                         );
-                    //}
-                //}
-            //);
+        //}
+        //}
+        //);
         //});
     });
 
@@ -78,15 +78,17 @@ document.addEventListener('DOMContentLoaded', () => {
         divUsers.innerHTML = '';
         console.log(sessionStorage);
         const contacts = JSON.parse(sessionStorage.getItem('contacts'));
-        contacts.forEach(contact => {
-            contact = JSON.parse(contact);
+        contacts.forEach((contact) => {
+            console.log(contact);
             divUser = document.createElement('div');
             divUser.setAttribute('class', 'div-user');
             userTitle = document.createElement('p');
             userTitle.setAttribute('class', 'p-user-title');
             userTitle.innerHTML = contact.username;
             divUser.appendChild(userTitle);
-            divUser.addEventListener('click', () => loadChatUser(contact.chatId));
+            divUser.addEventListener('click', () =>
+                loadChatUser(contact.chatId)
+            );
             divUsers.appendChild(divUser);
         });
     }
@@ -136,16 +138,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadChatUser(chatId) {
         resetChat();
-        // prettier-ignore
-        const response = searchMessagesWith(chatId);
-        response.then((data) => {
+        //const response = searchMessagesWith(chatId);
+        socket.emit('fetch messages', { chatId }, (data) => {
             if (data) {
-                document.querySelector('#chat-title-with-who').textContent = data.username;
-                console.log('data', data)
-                if (data.chat) {
-                    const messages = data.chat.messages;
-                    if (messages) {
-                        //searchInSession('/searchUsername').then((username) => {
+                try {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    // prettier-ignore
+                    document.querySelector('#chat-title-with-who').textContent = data.username;
+                    if (data.chat) {
+                        const messages = data.chat.messages;
+                        if (messages) {
                             messages.forEach((messageData) => {
                                 loadMessage(
                                     messageData.senderUsername,
@@ -153,11 +156,34 @@ document.addEventListener('DOMContentLoaded', () => {
                                     messageData.senderUsername == username
                                 );
                             });
-                        // });
+                        }
                     }
+                } catch (e) {
+                    console.log(data)
                 }
             }
         });
+
+        // response.then((data) => {
+        //     if (data) {
+        //         document.querySelector('#chat-title-with-who').textContent = data.username;
+        //         console.log('data', data)
+        //         if (data.chat) {
+        //             const messages = data.chat.messages;
+        //             if (messages) {
+        //                 //searchInSession('/searchUsername').then((username) => {
+        //                     messages.forEach((messageData) => {
+        //                         loadMessage(
+        //                             messageData.senderUsername,
+        //                             messageData.message,
+        //                             messageData.senderUsername == username
+        //                         );
+        //                     });
+        //                 // });
+        //             }
+        //         }
+        //     }
+        // });
     }
 
     function resetChat() {
@@ -166,24 +192,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function searchMessagesWith(chatId) {
-        const request = new XMLHttpRequest();
-        request.open('POST', '/fetchMessages');
-
-        let response = new Promise((resolve, reject) => {
-            request.onload = () => {
-                // console.log('request.responseText: ', request.responseText);
-                respText = request.responseText;
-                if (respText) {
-                    resolve(JSON.parse(respText));
-                } else {
-                    reject(null);
-                }
-            };
-        });
-        const dataToSend = new FormData();
-        dataToSend.append('chatId', chatId);
-        request.send(dataToSend);
-        return response;
+        // const request = new XMLHttpRequest();
+        // request.open('POST', '/fetchMessages');
+        // let response = new Promise((resolve, reject) => {
+        //     request.onload = () => {
+        //         // console.log('request.responseText: ', request.responseText);
+        //         respText = request.responseText;
+        //         if (respText) {
+        //             resolve(JSON.parse(respText));
+        //         } else {
+        //             reject(null);
+        //         }
+        //     };
+        // });
+        // const dataToSend = new FormData();
+        // dataToSend.append('chatId', chatId);
+        // request.send(dataToSend);
+        // return response;
     }
 
     document

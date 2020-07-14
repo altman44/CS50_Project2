@@ -40,12 +40,10 @@ class Flat():
         createdChat = None
 
         if len(users) >= 1:
-            # for user in users:
-                # foundUser = self.searchUserByUsername(username)
-                # chatUsers.append(foundUser)
-            # if len(chatUsers) >= 2:
             createdChat = Chat(len(self.__chats), users)
             self.__chats.append(createdChat)
+            for user in users:
+                user.addChat(createdChat)
         return createdChat
 
     def serialize(self):
@@ -97,8 +95,8 @@ class User():
         contacts = []
         for contact in self.__contacts:
             newContactData = {
-                'username': contact.getUsername(),
-                'chatId': contact.getChatId()
+                'username': contact.getUser().getUsername(),
+                'chatId': contact.getChat().getId()
             }
             contacts.append(newContactData)
         return contacts
@@ -110,19 +108,23 @@ class User():
         i = 0
         foundChat = None
 
-        while i < len(self.__chats) and not foundChat:
-            currentChat = self.__chats[i]
-            if (currentChat.getId() == chatId):
-                foundChat = currentChat
-            i += 1
-        return foundChat
+        try:
+            chatId = int(chatId)
+            while i < len(self.__chats) and not foundChat:
+                currentChat = self.__chats[i]
+                if currentChat.getId() == chatId:
+                    foundChat = currentChat
+                i += 1
+        except TypeError:
+            pass
+        finally:
+            return foundChat
 
-    def addContact(self, contact, chat):
+    def addContact(self, user, chat):
         newContact = None
-        if contact and chat:
-            newContact = Contact(contact, chat)
+        if user and chat:
+            newContact = Contact(user, chat)
             self.__contacts.append(newContact)
-            self.addChat(chat)
         return newContact
 
     def searchContact(self, username):
@@ -139,8 +141,7 @@ class User():
     def serialize(self):
         return {
             'id': self.__id,
-            'username': self.__username,
-            'chatsIds': self.__chatsIds
+            'username': self.__username
         }
 
 class Contact():
@@ -188,18 +189,22 @@ class Message():
 class Chat():
     def __init__(self, id, users):
         self.__id = id
+        print('users: ', users)
         self.setUsers(users)
         self.setMessages([])
     
     def setUsers(self, users):
         ok = False
-        if len(users) >= 2:
+        if len(users) >= 1:
             self.__users = users
             ok = True
         return ok
     
     def setMessages(self, messages):
         self.__messages = messages
+
+    def getId(self):
+        return self.__id
 
     def submitMessage(self, senderUsername, message):
         createdMsg = None
@@ -220,6 +225,5 @@ class Chat():
 
         return {
             'id': self.__id,
-            'users': serializedUsers,
             'messages': serializedMessages
         }

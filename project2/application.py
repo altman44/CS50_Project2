@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, flash, render_template, request, redirect, url_for, session
-from flask_socketio import SocketIO, emit, join_room
+from flask_socketio import SocketIO, emit, send, join_room
 from flask_session import Session
 from models.chat import Flat
 
@@ -21,7 +21,7 @@ flat = Flat()
 def before_first_request():
     session['activeUser'] = False
     session['user'] = None
-    session['currentChatId'] = None
+    session['currentChatId'] = -1
     print(session)
     
 import routes.main
