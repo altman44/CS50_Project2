@@ -54,7 +54,7 @@
 }
 
 #chat-main-div {
-  padding: 1rem;
+  padding: 1vh 1vw 1vh 1vw;
   border: 2px solid #eec408;
   background-color: #12d493;
   margin: 2vh 2vw 2vh 2vw;
@@ -65,7 +65,7 @@
 }
 #chat-main-div .col .chat-div-titles {
   border-bottom: 1px solid #eec408;
-  margin-bottom: 10px;
+  margin-bottom: 2vh;
 }
 #chat-main-div .col .chat-div-titles .chat-titles {
   font: bold italic small-caps 2.5vw "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
@@ -73,19 +73,19 @@
 }
 #chat-main-div .col #chat-div-chat #chat-div-messages {
   background-color: #e0f1f1;
-  margin: 2vh 0 0 0;
   padding: 0;
   max-width: 100%;
+  border-radius: 10px;
+}
+#chat-main-div .col #chat-div-chat #chat-div-messages #chat-div-messages-navbar {
+  background-color: #0f0627;
 }
 #chat-main-div .col #chat-div-chat #chat-div-messages #chat-div-messages-inside {
+  background-color: #0d0523;
   background-image: url("../img/bubble-message.png");
   background-size: auto;
   background-position: center;
   padding: 2vh 0.5vw 2vh 0.5vw;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  overscroll-behavior: smooth;
   height: 68vh;
   max-width: 100%;
 }
@@ -94,7 +94,7 @@
 }
 #chat-main-div .col #chat-div-chat #chat-div-messages #chat-div-messages-inside .div-message .message-div-text {
   max-width: 60%;
-  background-color: rgba(181, 168, 214, 0.85);
+  background-color: rgba(181, 168, 214, 0.9);
   padding: 1vh 1vw 0.8vh 1vw;
 }
 #chat-main-div .col #chat-div-chat #chat-div-messages #chat-div-messages-inside .div-message .message-div-text .title-author-message {
@@ -107,7 +107,7 @@
   overflow-wrap: break-word;
 }
 #chat-main-div .col #chat-div-chat #chat-div-submit {
-  background-color: rgba(181, 168, 214, 0.85);
+  background-color: rgba(181, 168, 214, 0.9);
   visibility: hidden;
 }
 #chat-main-div .col #chat-div-chat #chat-div-submit #input-message {

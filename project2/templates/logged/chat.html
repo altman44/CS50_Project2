@@ -9,8 +9,9 @@ Chat
 {% endblock title %}
 
 {% block body %}
-<div id="chat-main-div" class="jumbotron">
-    <div class="row container-fluid justify-content-around">
+<!-- class="jumbotron" -->
+<div id="chat-main-div">
+    <div class="container-fluid justify-content-around">
         <div id="col-chat" class="col">
             <div id="chat-div">
                 <div class="row">
@@ -19,8 +20,8 @@ Chat
                             <p class="chat-titles">{{ username }}</p>
                         </div>
                         <div id="chat-div-chat">
-                            <div id="chat-div-messages" class="jumbotron">
-                                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div id="chat-div-messages">
+                                <nav id="chat-div-messages-navbar" class="navbar navbar-expand-lg navbar-light bg-light">
                                     <a id="chat-title-with-who" class="navbar-brand" href="#">{{ session.username }}</a>
                                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                                         data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
@@ -29,7 +30,7 @@ Chat
                                     </button>
                                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                                         <div class="navbar-nav">
-                                            <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+                                            <a class="nav-item nav-link active" href="#">Options <span class="sr-only">(current)</span></a>
                                             <a class="nav-item nav-link" href="#">Features</a>
                                         </div>
                                     </div>
@@ -65,11 +66,6 @@ Chat
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div class="col col-2">
-    <div class="chat-div-titles">
-        <p class="chat-titles">Options</p>
     </div>
 </div>
 <script src="{{ url_for('static', filename='js/chat.js') }}"></script>

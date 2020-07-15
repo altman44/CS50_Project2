@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#btn-submit-msg').onclick = () => {
             const message = document.querySelector('#input-message').value;
             socket.emit('submit message', {
-                message,
+                message
             });
         };
     });
@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('message submitted', (data) => {
         // Show message sent by another user or the user itself
-
         const sender = data.senderUsername;
         // prettier-ignore
         loadMessage(
@@ -54,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         divUsers.innerHTML = '';
         console.log(sessionStorage);
         const contacts = JSON.parse(sessionStorage.getItem('contacts'));
-        contacts.forEach((contact) => {
+        contacts.forEach(contact => {
             console.log(contact);
             divUser = document.createElement('div');
             divUser.setAttribute('class', 'div-user');
@@ -108,30 +107,39 @@ document.addEventListener('DOMContentLoaded', () => {
         // Scroll to show the new message forcing the top to be scroll's height (it actually goes up to its limit since it can't scroll farther than the height)
         divMessages.scrollTo({
             top: divMessages.scrollHeight,
-            behavior: 'smooth',
+            behavior: 'smooth'
         });
     }
 
     function loadChatUser(chatId) {
         resetChat();
-        socket.emit('fetch messages', { chatId }, (data) => {
+        const divChatMessagesInside = document.querySelector('#chat-div-messages-inside');
+
+        if (divChatMessagesInside.style.overflowY === '') {
+            console.log('entro')
+            divChatMessagesInside.style.overflowY = 'scroll';
+            divChatMessagesInside.style.overFlowX = 'hidden';
+            divChatMessagesInside.style.scrollBehavior = 'smooth';
+        }
+
+        socket.emit('fetch messages', { chatId }, data => {
             if (data) {
-                console.log(data);
                 const username = data.username;
                 // prettier-ignore
                 document.querySelector('#chat-title-with-who').textContent = username;
                 if (data.chat) {
                     const messages = data.chat.messages;
                     if (messages) {
-                        messages.forEach((messageData) => {
+                        messages.forEach(messageData => {
                             loadMessage(
                                 messageData.senderUsername,
                                 messageData.message,
-                                messageData.senderUsername == username
+                                messageData.senderUsername === username
                             );
                         });
                     }
                     document.querySelector('#chat-div-submit').style.visibility = 'visible';
+                    document.querySelector('#input-message').focus();
                 }
             }
         });

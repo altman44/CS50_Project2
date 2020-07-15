@@ -1,12 +1,12 @@
 @use 'base';
 $color-chat: rgb(224, 241, 241);
-$color-chat-message: rgba(181, 168, 214, 0.85);
+$color-chat-message: rgba(181, 168, 214, 0.9);
 $color-submit-message: $color-chat-message;
 $color-div-user-normal: #ffffff;
 $color-div-user-active: base.$color-primary-soft;
 
 #chat-main-div {
-    padding: 1rem;
+    padding: 1vh 1vw 1vh 1vw;
     border: 2px solid base.$color-secondary;
     background-color: base.$color-primary;
     margin: 2vh 2vw 2vh 2vw;
@@ -14,10 +14,10 @@ $color-div-user-active: base.$color-primary-soft;
     .col {
         border: 1px solid base.$color-secondary;
         overflow: hidden;
-        
+
         .chat-div-titles {
             border-bottom: 1px solid base.$color-secondary;
-            margin-bottom: 10px;
+            margin-bottom: 2vh;
 
             .chat-titles {
                 font: bold italic small-caps 2.5vw "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
@@ -28,21 +28,27 @@ $color-div-user-active: base.$color-primary-soft;
         #chat-div-chat {
             #chat-div-messages {
                 background-color: $color-chat;
-                margin: 2vh 0 0 0;
                 padding: 0;
                 max-width: 100%;
+                border-radius: 10px;
+
+                #chat-div-messages-navbar {
+                    background-color: base.$body-color;
+                }
 
                 #chat-div-messages-inside {
+                    background-color: darken($color: base.$body-color, $amount: 1);
+                    // background-color: base.$body-color;
                     background-image: url('../img/bubble-message.png');
                     // background-repeat: no-repeat;
                     // background-attachment: fixed;
                     background-size: auto;
                     background-position: center;
                     padding: 2vh .5vw 2vh .5vw;
-                    overflow-y: scroll;
-                    overflow-x: hidden;
-                    scroll-behavior: smooth;
-                    overscroll-behavior: smooth;
+                    // overflow-y: scroll;
+                    // overflow-x: hidden;
+                    // scroll-behavior: smooth;
+                    // overscroll-behavior: smooth;
                     height: 68vh;
                     max-width: 100%;
 
