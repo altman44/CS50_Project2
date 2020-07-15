@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('fetch messages', { chatId }, (data) => {
             if (data) {
                 console.log(data);
-                const username = data.username
+                const username = data.username;
                 // prettier-ignore
                 document.querySelector('#chat-title-with-who').textContent = username;
                 if (data.chat) {

@@ -171,8 +171,16 @@ class Contact():
 
 class Message():
     def __init__(self, senderUsername, message):
-        self.__senderUsername = senderUsername
-        self.__message = message
+        self.__setSenderUsername(senderUsername)
+        self.__setMessage(message)
+
+    def __setSenderUsername(self, username):
+        if username:
+            self.__senderUsername = username        
+
+    def __setMessage(self, message):
+        if message:
+            self.__message = message
 
     def getUsernameSender(self):
         return self.__senderUsername

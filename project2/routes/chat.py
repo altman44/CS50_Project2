@@ -1,5 +1,4 @@
 from application import app, session, flat, socketio, emit, send, flash, render_template, request, redirect, url_for, join_room, leave_room
-from flask import jsonify
 from models.chat import *
 
 @app.route('/chat', methods=['GET', 'POST'])
@@ -32,14 +31,15 @@ def login():
 
         session['user'] = user
         session['activeUser'] = True
-        session['currentChatId'] = None
+        session['currentChatId'] = -1
         return render_template('logged/chat.html')
 
 @socketio.on('fetch contacts')
 def fetchContacts():
-    data = {}
-    data['username'] = session['user'].getUsername()
-    data['contacts'] = session['user'].getContacts()
+    data = {
+        'username': session['user'].getUsername(),
+        'contacts': session['user'].getContacts()
+    }
     emit('contacts', data)
 
 @socketio.on('fetch messages')
@@ -67,7 +67,7 @@ def message(data):
         if currentChat:
             senderUsername = session['user'].getUsername()
             dataMessage = {
-                "sender": senderUsername,
+                "senderUsername": senderUsername,
                 'message': message,
                 'username': session['user'].getUsername()
             }
