@@ -7,11 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // When connected
     socket.on('connect', function () {
         socket.emit('fetch contacts');
-        searchInSession('/searchUsername').then((username) => {
-            if (username) {
-                loadChatUser(username);
-            }
-        });
 
         // Configure Submit message button
         document.querySelector('#btn-submit-msg').onclick = () => {
@@ -34,41 +29,26 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('message submitted', (data) => {
         // Show message sent by another user or the user itself
 
-        //searchInSession('/searchUsername').then((username) => {
-        //searchInSession('/searchCurrentReceiverUsername').then(
-        //(currentReceiverUsername) => {
-        //const receiver = data.receiverUsername;
         const sender = data.senderUsername;
-        // console.log('DATOS:');
-        // console.log('receptor actual: ' + currentReceiverUsername);
-        // console.log('receptor del mensaje: ' + receiver);
-        // console.log('emisor: ' + sender);
-        // console.log('usuario actual: ' + username);
-
         // prettier-ignore
-        //if (username == sender || (username == receiver && currentReceiverUsername == sender)) {
         loadMessage(
-                            data.senderUsername,
-                            data.message,
-                            data.senderUsername == data.username
-                        );
-        //}
-        //}
-        //);
-        //});
+            data.senderUsername,
+            data.message,
+            data.senderUsername == data.username
+        );
     });
 
-    function searchInSession(route) {
-        const req = new XMLHttpRequest();
-        req.open('POST', route);
-        const response = new Promise((resolve, reject) => {
-            req.onload = () => {
-                resolve(req.responseText);
-            };
-        });
-        req.send(null);
-        return response;
-    }
+    // function searchInSession(route) {
+    //     const req = new XMLHttpRequest();
+    //     req.open('POST', route);
+    //     const response = new Promise((resolve, reject) => {
+    //         req.onload = () => {
+    //             resolve(req.responseText);
+    //         };
+    //     });
+    //     req.send(null);
+    //     return response;
+    // }
 
     function loadUsers() {
         const divUsers = document.querySelector('#chat-div-users-inside');
@@ -138,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadChatUser(chatId) {
         resetChat();
-        //const response = searchMessagesWith(chatId);
         socket.emit('fetch messages', { chatId }, (data) => {
             if (data) {
                 console.log(data);
@@ -159,27 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-
-        // response.then((data) => {
-        //     if (data) {
-        //         document.querySelector('#chat-title-with-who').textContent = data.username;
-        //         console.log('data', data)
-        //         if (data.chat) {
-        //             const messages = data.chat.messages;
-        //             if (messages) {
-        //                 //searchInSession('/searchUsername').then((username) => {
-        //                     messages.forEach((messageData) => {
-        //                         loadMessage(
-        //                             messageData.senderUsername,
-        //                             messageData.message,
-        //                             messageData.senderUsername == username
-        //                         );
-        //                     });
-        //                 // });
-        //             }
-        //         }
-        //     }
-        // });
     }
 
     function resetChat() {
@@ -187,31 +145,10 @@ document.addEventListener('DOMContentLoaded', () => {
         divMessages.innerHTML = '';
     }
 
-    function searchMessagesWith(chatId) {
-        // const request = new XMLHttpRequest();
-        // request.open('POST', '/fetchMessages');
-        // let response = new Promise((resolve, reject) => {
-        //     request.onload = () => {
-        //         // console.log('request.responseText: ', request.responseText);
-        //         respText = request.responseText;
-        //         if (respText) {
-        //             resolve(JSON.parse(respText));
-        //         } else {
-        //             reject(null);
-        //         }
-        //     };
-        // });
-        // const dataToSend = new FormData();
-        // dataToSend.append('chatId', chatId);
-        // request.send(dataToSend);
-        // return response;
-    }
-
-    document
-        .querySelector('#input-message')
-        .addEventListener('keypress', (event) => {
-            if (event.keyCode == 13) {
-                document.querySelector('#btn-submit-msg').onclick();
-            }
-        });
+    // prettier-ignore
+    document.querySelector('#input-message').addEventListener('keypress', (event) => {
+        if (event.keyCode == 13) {
+            document.querySelector('#btn-submit-msg').onclick();
+        }
+    });
 });

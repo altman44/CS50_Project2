@@ -44,8 +44,9 @@ def fetchContacts():
 
 @socketio.on('fetch messages')
 def fetchMessages(data):
-    data = {}
+    messageData = {}
     try:
+        print('chatId: ', data['chatId'])
         chatId = int(data['chatId'])
         currentChat = session['user'].searchChat(chatId)
         if currentChat:
@@ -53,9 +54,11 @@ def fetchMessages(data):
                 leave_room(session['currentChatId'])
             join_room(chatId)
             session['currentChatId'] = int(chatId)
-            data['username'] = session['user'].getUsername()
-            data['chat'] = currentChat.serialize()
-    return data
+            messageData['username'] = session['user'].getUsername()
+            messageData['chat'] = currentChat.serialize()
+    except:
+        pass
+    return messageData
 
 @socketio.on('submit message')
 def message(data):
