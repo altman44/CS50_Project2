@@ -141,25 +141,21 @@ document.addEventListener('DOMContentLoaded', () => {
         //const response = searchMessagesWith(chatId);
         socket.emit('fetch messages', { chatId }, (data) => {
             if (data) {
-                try {
-                    data = JSON.parse(data);
-                    console.log(data);
-                    // prettier-ignore
-                    document.querySelector('#chat-title-with-who').textContent = data.username;
-                    if (data.chat) {
-                        const messages = data.chat.messages;
-                        if (messages) {
-                            messages.forEach((messageData) => {
-                                loadMessage(
-                                    messageData.senderUsername,
-                                    messageData.message,
-                                    messageData.senderUsername == username
-                                );
-                            });
-                        }
+                console.log(data);
+                const username = data.username
+                // prettier-ignore
+                document.querySelector('#chat-title-with-who').textContent = username;
+                if (data.chat) {
+                    const messages = data.chat.messages;
+                    if (messages) {
+                        messages.forEach((messageData) => {
+                            loadMessage(
+                                messageData.senderUsername,
+                                messageData.message,
+                                messageData.senderUsername == username
+                            );
+                        });
                     }
-                } catch (e) {
-                    console.log(data)
                 }
             }
         });

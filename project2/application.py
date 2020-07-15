@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, flash, render_template, request, redirect, url_for, session
-from flask_socketio import SocketIO, emit, send, join_room
+from flask_socketio import SocketIO, emit, send, join_room, leave_room
 from flask_session import Session
 from models.chat import Flat
 

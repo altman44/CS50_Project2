@@ -1,4 +1,4 @@
-from application import app, session, flat, socketio, emit, send, flash, render_template, request, redirect, url_for, join_room
+from application import app, session, flat, socketio, emit, send, flash, render_template, request, redirect, url_for, join_room, leave_room
 from flask import jsonify
 from models.chat import *
 
@@ -39,32 +39,29 @@ def login():
 def fetchContacts():
     data = {}
     data['username'] = session['user'].getUsername()
-    # data['users'] = flat.getUsersUsernames()
     data['contacts'] = session['user'].getContacts()
-    emit('contacts', data, broadcast=True)
+    emit('contacts', data)
 
 @socketio.on('fetch messages')
 def fetchMessages(data):
-    chatId = data['chatId']
-    print("chatId: ", chatId)
-    currentChat = session['user'].searchChat(chatId)
-    print('chat: ', currentChat)
-    if currentChat:
-        join_room(chatId)
-        session['currentChatId'] = chatId
-        data = {
-            'username': session['user'].getUsername(),
-            'chat': currentChat.serialize()
-        }
-        print('chat: ', data)
-        return data
-    return {}
+    data = {}
+    try:
+        chatId = int(data['chatId'])
+        currentChat = session['user'].searchChat(chatId)
+        if currentChat:
+            if session['currentChatId'] != -1:
+                leave_room(session['currentChatId'])
+            join_room(chatId)
+            session['currentChatId'] = int(chatId)
+            data['username'] = session['user'].getUsername()
+            data['chat'] = currentChat.serialize()
+    return data
 
 @socketio.on('submit message')
 def message(data):
     chatId = session['currentChatId']
     message = data['message']
-
+    print('chatId: ', chatId)
     if message and chatId != -1:
         currentChat = session['user'].searchChat(chatId)
         if currentChat:
@@ -102,8 +99,3 @@ def message(data):
 @app.route('/searchUsername', methods=['POST'])
 def searchCurrentUsername():
     return session['user'].getUsername()
-
-# @app.route('/searchCurrentReceiverUsername', methods=['POST'])
-# def searchCurrentUsernameReceiver():
-#     # print('currentUsername searched: ', session['currentUsernameReceiver'])
-#     return session['currentReceiverUsername']
