@@ -78,7 +78,10 @@
   max-width: 100%;
 }
 #chat-main-div .col #chat-div-chat #chat-div-messages #chat-div-messages-inside {
-  padding: 2vh 1.5vw 2vh 1.5vw;
+  background-image: url("../img/bubble-message.png");
+  background-size: auto;
+  background-position: center;
+  padding: 2vh 0.5vw 2vh 0.5vw;
   overflow-y: scroll;
   overflow-x: hidden;
   scroll-behavior: smooth;
@@ -91,7 +94,7 @@
 }
 #chat-main-div .col #chat-div-chat #chat-div-messages #chat-div-messages-inside .div-message .message-div-text {
   max-width: 60%;
-  background-color: rgba(181, 168, 214, 0.774);
+  background-color: rgba(181, 168, 214, 0.85);
   padding: 1vh 1vw 0.8vh 1vw;
 }
 #chat-main-div .col #chat-div-chat #chat-div-messages #chat-div-messages-inside .div-message .message-div-text .title-author-message {
@@ -104,7 +107,8 @@
   overflow-wrap: break-word;
 }
 #chat-main-div .col #chat-div-chat #chat-div-submit {
-  background-color: rgba(181, 168, 214, 0.774);
+  background-color: rgba(181, 168, 214, 0.85);
+  visibility: hidden;
 }
 #chat-main-div .col #chat-div-chat #chat-div-submit #input-message {
   font-size: 100%;

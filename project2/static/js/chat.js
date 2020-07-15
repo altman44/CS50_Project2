@@ -11,13 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Configure Submit message button
         document.querySelector('#btn-submit-msg').onclick = () => {
             const message = document.querySelector('#input-message').value;
-            //searchInSession('/searchCurrentReceiverUsername').then(
-            //(currentReceiverUsername) => {
             socket.emit('submit message', {
                 message,
             });
-            //}
-            //);
         };
     });
 
@@ -135,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             );
                         });
                     }
+                    document.querySelector('#chat-div-submit').style.visibility = 'visible';
                 }
             }
         });

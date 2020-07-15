@@ -1,6 +1,6 @@
 @use 'base';
 $color-chat: rgb(224, 241, 241);
-$color-chat-message: rgba(181, 168, 214, 0.774);
+$color-chat-message: rgba(181, 168, 214, 0.85);
 $color-submit-message: $color-chat-message;
 $color-div-user-normal: #ffffff;
 $color-div-user-active: base.$color-primary-soft;
@@ -33,7 +33,12 @@ $color-div-user-active: base.$color-primary-soft;
                 max-width: 100%;
 
                 #chat-div-messages-inside {
-                    padding: 2vh 1.5vw 2vh 1.5vw;
+                    background-image: url('../img/bubble-message.png');
+                    // background-repeat: no-repeat;
+                    // background-attachment: fixed;
+                    background-size: auto;
+                    background-position: center;
+                    padding: 2vh .5vw 2vh .5vw;
                     overflow-y: scroll;
                     overflow-x: hidden;
                     scroll-behavior: smooth;
@@ -66,6 +71,7 @@ $color-div-user-active: base.$color-primary-soft;
         
             #chat-div-submit {
                 background-color: $color-submit-message;
+                visibility: hidden;
 
                 #input-message {
                     font-size: 100%;

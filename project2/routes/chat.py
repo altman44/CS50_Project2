@@ -36,9 +36,11 @@ def login():
 
 @socketio.on('fetch contacts')
 def fetchContacts():
+    username = session['user'].getUsername()
+    contacts = session['user'].getContacts()
     data = {
-        'username': session['user'].getUsername(),
-        'contacts': session['user'].getContacts()
+        'username': username,
+        'contacts': contacts
     }
     emit('contacts', data)
 
@@ -46,7 +48,6 @@ def fetchContacts():
 def fetchMessages(data):
     messageData = {}
     try:
-        print('chatId: ', data['chatId'])
         chatId = int(data['chatId'])
         currentChat = session['user'].searchChat(chatId)
         if currentChat:
