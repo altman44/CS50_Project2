@@ -71,6 +71,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadMessage(username, message, isCurrentUser) {
         let classToAdd;
         let position;
+        const divMessages = document.querySelector('#chat-div-messages-inside');
+        const scrollHeight = divMessages.scrollHeight;
+        const clientHeight = divMessages.clientHeight;
+        const scrollTop = divMessages.scrollTop;
 
         if (isCurrentUser) {
             document.querySelector('#input-message').value = '';
@@ -80,8 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
             classToAdd = 'justify-content-start';
             position = 'left';
         }
-
-        const divMessages = document.querySelector('#chat-div-messages-inside');
 
         const divMessage = document.createElement('div');
         divMessage.setAttribute('class', 'd-flex div-message');
@@ -105,21 +107,24 @@ document.addEventListener('DOMContentLoaded', () => {
         divMessages.appendChild(divMessage);
 
         // Scroll to show the new message forcing the top to be scroll's height (it actually goes up to its limit since it can't scroll farther than the height)
-        divMessages.scrollTo({
-            top: divMessages.scrollHeight,
-            behavior: 'smooth'
-        });
+        // If the user is not at the bottom of the chat, it will not scroll
+        if (scrollTop == scrollHeight - clientHeight || scrollHeight == clientHeight) {
+            divMessages.scrollTo({
+                top: divMessages.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
     }
 
     function loadChatUser(chatId) {
         resetChat();
-        const divChatMessagesInside = document.querySelector('#chat-div-messages-inside');
+        const divMessages = document.querySelector('#chat-div-messages-inside');
 
-        if (divChatMessagesInside.style.overflowY === '') {
-            console.log('entro')
-            divChatMessagesInside.style.overflowY = 'scroll';
-            divChatMessagesInside.style.overFlowX = 'hidden';
-            divChatMessagesInside.style.scrollBehavior = 'smooth';
+        if (divMessages.style.overflowY === '') {
+            console.log('entro');
+            divMessages.style.overflowY = 'scroll';
+            divMessages.style.overFlowX = 'hidden';
+            divMessages.scrollBehavior = 'smooth';
         }
 
         socket.emit('fetch messages', { chatId }, data => {
@@ -152,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // prettier-ignore
     document.querySelector('#input-message').addEventListener('keypress', (event) => {
-        if (event.keyCode == 13) {
+        if (event.keyCode === 13) {
             document.querySelector('#btn-submit-msg').onclick();
         }
     });
