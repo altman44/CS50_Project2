@@ -6,7 +6,7 @@ def login():
     sessionKeys = session.keys()
     if 'activeUser' in sessionKeys and 'user' in sessionKeys and 'currentChatId' in sessionKeys:
         if session['activeUser']:
-            return render_template('logged/chat.html')
+            return render_template('logged/chat.html', username=session['user'].getUsername())
     else:
         redirect('before_first_request')
 
@@ -32,7 +32,7 @@ def login():
         session['user'] = user
         session['activeUser'] = True
         session['currentChatId'] = -1
-        return render_template('logged/chat.html')
+        return render_template('logged/chat.html', username=session['user'].getUsername())
 
 @socketio.on('fetch contacts')
 def fetchContacts():
@@ -76,28 +76,6 @@ def message(data):
             }
             currentChat.submitMessage(senderUsername, message)
             emit('message submitted', dataMessage, room=chatId)
-
-    # if message and receiverUsername:
-    #     submitted = False
-    #     dataMessage = {}
-
-    #     senderUsername = session['username']
-    #     usersChat = [senderUsername, receiverUsername]
-    #     print(f"sender: {senderUsername} y receiver: {receiverUsername}")
-    #     chatFound = flat.searchChatByUsernames(usersChat)
-
-    #     if chatFound:
-    #         submitted = chatFound.submitMessage(senderUsername, receiverUsername, message)
-    #     else:
-    #         newChat = flat.addChat(usersChat)
-    #         if newChat:
-    #             submitted = newChat.submitMessage(senderUsername, receiverUsername, message)
-        
-    #     dataMessage['senderUsername'] = senderUsername
-    #     dataMessage['receiverUsername'] = receiverUsername
-    #     dataMessage['message'] = message
-    #     print(dataMessage)
-    #     emit('message submitted', dataMessage, broadcast=True)
 
 @app.route('/searchUsername', methods=['POST'])
 def searchCurrentUsername():
