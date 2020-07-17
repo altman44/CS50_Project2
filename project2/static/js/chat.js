@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // If the user is not at the bottom of the chat, it will not scroll
         if (scrollTop == scrollHeight - clientHeight || scrollHeight == clientHeight) {
             divMessages.scrollTo({
-                top: divMessages.scrollHeight,
+                top: scrollHeight - clientHeight,
                 behavior: 'smooth'
             });
         }
