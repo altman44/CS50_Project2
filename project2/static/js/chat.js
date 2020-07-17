@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
     // When connected
-    socket.on('connect', function () {
+    socket.on('connect', () => {
         socket.emit('fetch contacts');
 
         // Configure Submit message button
@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 message
             });
         };
+    });
+
+    socket.on('disconnect', () => {
+        console.log('DISCONNECTION');
     });
 
     socket.on('contacts', (data) => {
@@ -108,9 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Scroll to show the new message forcing the top to be scroll's height (it actually goes up to its limit since it can't scroll farther than the height)
         // If the user is not at the bottom of the chat, it will not scroll
+        console.log(scrollHeight, clientHeight)
         if (scrollTop == scrollHeight - clientHeight || scrollHeight == clientHeight) {
             divMessages.scrollTo({
-                top: scrollHeight - clientHeight,
+                top: scrollHeight,
                 behavior: 'smooth'
             });
         }
