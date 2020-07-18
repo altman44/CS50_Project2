@@ -78,6 +78,15 @@ def message(data):
             currentChat.submitMessage(senderUsername, message)
             emit('message submitted', dataMessage, room=chatId)
 
+@socketio.on('search user')
+def searchUser(data):
+    print(data)
+    MAX_NUMBER_SEARCH_USERS = 10
+    users = []
+    if 'searched' in data and data['searched']:
+        users = flat.searchUsers(data['searched'], MAX_NUMBER_SEARCH_USERS, 0, [])
+    return users
+
 @app.route('/searchUsername', methods=['POST'])
 def searchCurrentUsername():
     return session['user'].getUsername()

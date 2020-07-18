@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Configure Submit message button
         document.querySelector('#btn-submit-msg').onclick = () => {
             const message = document.querySelector('#input-message').value;
-            socket.emit('submit message', {
-                message
-            });
+            if (message) {
+                socket.emit('submit message', { message });
+            }
         };
     });
 
@@ -33,21 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
         loadMessage(
             data.senderUsername,
             data.message,
-            data.senderUsername == data.username
+            data.senderUsername === data.username
         );
     });
-
-    // function searchInSession(route) {
-    //     const req = new XMLHttpRequest();
-    //     req.open('POST', route);
-    //     const response = new Promise((resolve, reject) => {
-    //         req.onload = () => {
-    //             resolve(req.responseText);
-    //         };
-    //     });
-    //     req.send(null);
-    //     return response;
-    // }
 
     function loadUsers() {
         const divUsers = document.querySelector('#chat-div-users-inside');
@@ -57,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         divUsers.innerHTML = '';
         console.log(sessionStorage);
         const contacts = JSON.parse(sessionStorage.getItem('contacts'));
-        contacts.forEach(contact => {
+        contacts.forEach((contact) => {
             console.log(contact);
             divUser = document.createElement('div');
             divUser.setAttribute('class', 'div-user');
@@ -112,8 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Scroll to show the new message forcing the top to be scroll's height (it actually goes up to its limit since it can't scroll farther than the height)
         // If the user is not at the bottom of the chat, it will not scroll
-        console.log(scrollHeight, clientHeight)
-        if (scrollTop == scrollHeight - clientHeight || scrollHeight == clientHeight) {
+        // prettier-ignore
+        if (scrollTop === (scrollHeight - clientHeight) || scrollHeight === clientHeight) {
             divMessages.scrollTo({
                 top: scrollHeight,
                 behavior: 'smooth'
@@ -132,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             divMessages.scrollBehavior = 'smooth';
         }
 
-        socket.emit('fetch messages', { chatId }, data => {
+        socket.emit('fetch messages', { chatId }, (data) => {
             if (data) {
                 const username = data.username;
                 // prettier-ignore
@@ -140,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.chat) {
                     const messages = data.chat.messages;
                     if (messages) {
-                        messages.forEach(messageData => {
+                        messages.forEach((messageData) => {
                             loadMessage(
                                 messageData.senderUsername,
                                 messageData.message,
@@ -148,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             );
                         });
                     }
+                    // prettier-ignore
                     document.querySelector('#chat-div-submit').style.visibility = 'visible';
                     document.querySelector('#input-message').focus();
                 }
@@ -165,5 +154,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.keyCode === 13) {
             document.querySelector('#btn-submit-msg').onclick();
         }
+    });
+
+    // prettier-ignore
+    document.querySelector('#input-search-users').addEventListener('input', function () {
+        const searched = this.value;
+        socket.emit('search user', { searched }, usernames => {
+            console.log(usernames);
+            const dataList = document.querySelector('#list-users');
+            for (i = 0; i < dataList.options.length; i++) {
+                console.log(dataList.children)
+                dataList.options[i].remove()
+            }
+            usernames.forEach(username => {
+                let newOption = document.createElement('option');
+                newOption.value = username;
+                newOption.textContent = username;
+                dataList.appendChild(newOption);
+            })
+        }); 
     });
 });

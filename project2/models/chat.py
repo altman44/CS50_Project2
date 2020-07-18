@@ -3,11 +3,16 @@ class Flat():
         self.__users = []
         self.__chats = []
 
-    def getUsersUsernames(self):
-        newArrWithUsernames = []
-        for user in self.__users:
-            newArrWithUsernames.append(user.getUsername())
-        return newArrWithUsernames
+    def searchUsers(self, search, maxSearchUsers, counter, foundUsers):
+        if counter < maxSearchUsers and counter < len(self.__users) and counter >= 0:
+            foundUsers = foundUsers
+            user = self.__users[counter]
+            username = user.getUsername()
+            if search in username:
+                foundUsers.append(username)
+            counter += 1
+            return self.searchUsers(search, maxSearchUsers, counter, foundUsers)
+        return foundUsers
 
     def addUser(self, username):
         createdUser = None
