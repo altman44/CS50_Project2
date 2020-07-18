@@ -21,12 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('DISCONNECTION');
     });
 
-    socket.on('contacts', (data) => {
+    socket.on('contacts', data => {
         sessionStorage.setItem('contacts', JSON.stringify(data.contacts));
         loadUsers();
     });
 
-    socket.on('message submitted', (data) => {
+    socket.on('message submitted', data => {
         // Show message sent by another user or the user itself
         const sender = data.senderUsername;
         // prettier-ignore
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         divUsers.innerHTML = '';
         console.log(sessionStorage);
         const contacts = JSON.parse(sessionStorage.getItem('contacts'));
-        contacts.forEach((contact) => {
+        contacts.forEach(contact => {
             console.log(contact);
             divUser = document.createElement('div');
             divUser.setAttribute('class', 'div-user');
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             divMessages.scrollBehavior = 'smooth';
         }
 
-        socket.emit('fetch messages', { chatId }, (data) => {
+        socket.emit('fetch messages', { chatId }, data => {
             if (data) {
                 const username = data.username;
                 // prettier-ignore
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.chat) {
                     const messages = data.chat.messages;
                     if (messages) {
-                        messages.forEach((messageData) => {
+                        messages.forEach(messageData => {
                             loadMessage(
                                 messageData.senderUsername,
                                 messageData.message,
@@ -157,21 +157,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // prettier-ignore
-    document.querySelector('#input-search-users').addEventListener('input', function () {
-        const searched = this.value;
-        socket.emit('search user', { searched }, usernames => {
-            console.log(usernames);
-            const dataList = document.querySelector('#list-users');
-            for (i = 0; i < dataList.options.length; i++) {
-                console.log(dataList.children)
-                dataList.options[i].remove()
-            }
-            usernames.forEach(username => {
-                let newOption = document.createElement('option');
-                newOption.value = username;
-                newOption.textContent = username;
-                dataList.appendChild(newOption);
-            })
-        }); 
-    });
+    document.querySelector('#input-search-users')
+        .addEventListener('input', function() {
+            const dataList = document.querySelector('#list-users')
+            removeOptionsFromDataList(dataList);
+            searchUsers(this.value)
+                .then(usernames => {
+                    appendOptionsToDataList(dataList, usernames);
+                })
+        });
+
+    function searchUsers(searched) {
+        return new Promise ((resolve, reject) => {
+            socket.emit('search user', { searched }, usernames => {
+                resolve(usernames);
+            });
+        })
+    }
+
+    function removeOptionsFromDataList(dataList) {
+        for (i = 0; i < dataList.options.length; i++) {
+            console.log(dataList.options[i]);
+            dataList.options[i].remove();
+        }
+    }
+
+    function appendOptionsToDataList(dataList, usernames) {
+        usernames.forEach(username => {
+            let newOption = document.createElement('option');
+            newOption.value = username;
+            dataList.appendChild(newOption);
+        });
+    }
 });
