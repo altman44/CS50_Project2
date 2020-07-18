@@ -1,5 +1,6 @@
 #body {
   background-color: #0f0627;
+  font-family: fantasy;
 }
 
 .center {
@@ -37,8 +38,9 @@
   flex-direction: row;
   justify-content: flex-end;
 }
-.navbar-container .div-input-search {
-  width: 40%;
+
+.div-input-search {
+  width: 25%;
 }
 
 /* scrollbar width */

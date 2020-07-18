@@ -158,18 +158,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // prettier-ignore
     document.querySelector('#input-search-users')
-        .addEventListener('input', function() {
-            const dataList = document.querySelector('#list-users');
-            // console.log(dataList.options)
-            // dataList = document.createElement('datalist');
-            // dataList.setAttribute('id', 'list-users');
-
-            // removeOptionsFromDataList(dataList);
-            searchUsers(this.value)
+        .addEventListener('input', function(event) {
+            const searchedUsername = this.value;
+            if (!event.inputType) {
+                // it means a datalist option was selected
+                showUserData(searchedUsername);
+            } else {
+                searchUsers(searchedUsername)
                 .then(usernames => {
-                    //console.log(usernames)
+                    const dataList = document.querySelector('#list-users');
                     appendOptionsToDataList(dataList, usernames);
                 })
+            }
         });
 
     function searchUsers(searched) {
@@ -180,14 +180,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function appendOptionsToDataList(dataList, usernames) {
+    function appendOptionsToDataList(dataList, array) {
         dataList.innerHTML = '';
-        usernames.forEach(username => {
-            // let newOption = document.createElement('option');
-            let newOption = `<option value="${username}">${username}</option>`;
-            // newOption.value = username;
-            // dataList.appendChild(newOption);
-            dataList.innerHTML += newOption;
+        array.forEach(element => {
+            let newOption = document.createElement('option');
+            newOption.addEventListener('onclick', () => {
+                console.log('hey');
+            });
+            newOption.value = element;
+            dataList.appendChild(newOption);
         });
+    }
+
+    function showUserData(username) {
+
     }
 });
