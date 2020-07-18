@@ -9,7 +9,6 @@ Chat
 {% endblock title %}
 
 {% block body %}
-<!-- class="jumbotron" -->
 <div id="chat-main-div">
     <div class="container-fluid justify-content-around">
         <div id="col-chat" class="col">
@@ -29,10 +28,12 @@ Chat
                                         <span class="navbar-toggler-icon"></span>
                                     </button>
                                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                                        <div class="navbar-nav">
+                                        <div class="navbar-nav navbar-container">
                                             <!-- <a class="nav-item nav-link active" href="#">Search users<span class="sr-only">(current)</span></a> -->
-                                            <input id="input-search-users" class="form-control m-2" type="search" list="list-users" placeholder="Search users" aria-label="Search" autocomplete="off">
-                                            <datalist id="list-users"></datalist>
+                                            <div class="div-input-search">
+                                                <input id="input-search-users" class="form-control m-2 input-search" type="search" list="list-users" placeholder="Search users" aria-label="Search" autocomplete="off">
+                                                <datalist id="list-users"></datalist>
+                                            </div>
                                         </div>
                                     </div>
                                 </nav>

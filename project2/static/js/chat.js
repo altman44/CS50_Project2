@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('disconnect', () => {
-        console.log('DISCONNECTION');
+        console.log('DISCONNECTION, you cannot send messages!');
     });
 
     socket.on('contacts', data => {
@@ -159,34 +159,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // prettier-ignore
     document.querySelector('#input-search-users')
         .addEventListener('input', function() {
-            const dataList = document.querySelector('#list-users')
-            removeOptionsFromDataList(dataList);
+            const dataList = document.querySelector('#list-users');
+            // console.log(dataList.options)
+            // dataList = document.createElement('datalist');
+            // dataList.setAttribute('id', 'list-users');
+
+            // removeOptionsFromDataList(dataList);
             searchUsers(this.value)
                 .then(usernames => {
+                    //console.log(usernames)
                     appendOptionsToDataList(dataList, usernames);
                 })
         });
 
     function searchUsers(searched) {
-        return new Promise ((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             socket.emit('search user', { searched }, usernames => {
                 resolve(usernames);
             });
-        })
-    }
-
-    function removeOptionsFromDataList(dataList) {
-        for (i = 0; i < dataList.options.length; i++) {
-            console.log(dataList.options[i]);
-            dataList.options[i].remove();
-        }
+        });
     }
 
     function appendOptionsToDataList(dataList, usernames) {
+        dataList.innerHTML = '';
         usernames.forEach(username => {
-            let newOption = document.createElement('option');
-            newOption.value = username;
-            dataList.appendChild(newOption);
+            // let newOption = document.createElement('option');
+            let newOption = `<option value="${username}">${username}</option>`;
+            // newOption.value = username;
+            // dataList.appendChild(newOption);
+            dataList.innerHTML += newOption;
         });
     }
 });

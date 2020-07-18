@@ -31,6 +31,16 @@
   font-weight: bold;
 }
 
+.navbar-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.navbar-container .div-input-search {
+  width: 40%;
+}
+
 /* scrollbar width */
 ::-webkit-scrollbar {
   width: 12px;
