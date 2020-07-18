@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('contacts', data => {
+        sessionStorage.setItem('username', data.username);
         sessionStorage.setItem('contacts', JSON.stringify(data.contacts));
         loadUsers();
     });
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadMessage(
             data.senderUsername,
             data.message,
-            data.senderUsername === data.username
+            data.senderUsername === sessionStorage.getItem('username')
         );
     });
 
@@ -122,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         socket.emit('fetch messages', { chatId }, data => {
             if (data) {
-                const username = data.username;
+                const username = sessionStorage.getItem('username');
                 // prettier-ignore
                 document.querySelector('#chat-title-with-who').textContent = username;
                 if (data.chat) {

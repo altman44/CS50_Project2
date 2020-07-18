@@ -55,7 +55,6 @@ def fetchMessages(data):
                 leave_room(session['currentChatId'])
             join_room(chatId)
             session['currentChatId'] = int(chatId)
-            messageData['username'] = session['user'].getUsername()
             messageData['chat'] = currentChat.serialize()
     except:
         pass
