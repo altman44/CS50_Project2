@@ -20,6 +20,9 @@ def login():
         if username == '':
             flash("You must enter your username to login", 'danger')
             return redirect(url_for('index'))
+        if flat.searchUserByUsername(username):
+            flash('The username already exists', 'danger')
+            return redirect(url_for('index'))
 
         user = flat.searchUserByUsername(username)
         if not user:
@@ -103,8 +106,12 @@ def searchUserData(data):
         userData = foundUser.serialize()
         userData['isContact'] = isContact
 
-    print(userData)
+    print(userData['isContact'])
     return userData
+
+@socketio.on('/createChat')
+def createChat(username):
+    return 0
 
 @app.route('/searchUsername', methods=['POST'])
 def searchCurrentUsername():

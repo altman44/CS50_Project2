@@ -34,6 +34,29 @@
   background-color: #12d493;
 }
 
+.btn-flat {
+  border: thick;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 100%;
+}
+
+.btn-flat-primary {
+  background-color: #12d493;
+}
+
+.btn-flat-secondary {
+  background-color: #eec408;
+}
+
+.btn-flat-backdrop {
+  background-color: #0f0627;
+}
+
+.flat-title {
+  font: small-caps 3vw fantasy, "Gill Sans", "Calibri", sans-serif;
+}
+
 .div-input {
   padding: 10px;
 }

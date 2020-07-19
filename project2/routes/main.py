@@ -6,7 +6,6 @@ from application import app, session, flat, flash, render_template, request, red
 @app.route('/sign_in')
 @app.route('/home')
 def index():
-    print(session)
     try:
         if session['activeUser'] and session['user']:
             return redirect(url_for('login'))

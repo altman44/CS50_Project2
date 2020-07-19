@@ -121,8 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('fetch messages', { chatId }, data => {
             if (data) {
                 const username = sessionStorage.getItem('username');
-                // prettier-ignore
-                document.querySelector('#chat-title-with-who').textContent = username;
+                showChatHeader(username);
                 if (data.chat) {
                     const messages = data.chat.messages;
                     if (messages) {
@@ -145,6 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetChat() {
         const divMessages = document.querySelector('#chat-div-messages-inside');
         divMessages.innerHTML = '';
+    }
+
+    function showChatHeader(username) {
+        // prettier-ignore
+        document.querySelector('#chat-title-with-who').textContent = username;
     }
 
     // prettier-ignore
@@ -197,10 +201,48 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('search user data', { username }, data => {
             console.log(data);
             if (data.user) {
-                $('#modal-userData').modal('show');
+                const username = data.user.username;
+                const isContact = data.isContact;
+                const chat = data.chat;
+
+                // prettier-ignore
                 const titleUser = document.querySelector('#modal-userData-title');
-                titleUser.textContent = data.user.username;
+                // prettier-ignore
+                const btnContact = document.querySelector('#modal-userData-btnContact');
+                const btnChat = document.querySelector(
+                    '#modal-userData-btnChat'
+                );
+
+                // Showing modal
+                $('#modal-userData').modal('show');
+                titleUser.textContent = username;
+                if (username !== sessionStorage.getItem('username')) {
+                    btnContact.style.display = 'block';
+                    if (isContact) {
+                        btnContact.textContent = 'Delete contact';
+                        btnContact.classList.add('btn-flat-secondary');
+                        btnContact.onclick = removeContact(username);
+                    } else {
+                        btnContact.textContent = 'Add contact';
+                        btnContact.classList.add('btn-flat-backdrop');
+                        btnContact.onclick = addContact(username);
+                    }
+                }
+                if (chat) {
+                    btnChat.onclick = loadChatUser(chat.id);
+                } else {
+                    btnChat.onclick = loadEmptyChat(username);
+                }
             }
         });
     }
+
+    function loadEmptyChat(username) {
+        resetChat();
+        showChatHeader(username);
+    };
+
+    function addContact(username) {}
+
+    function removeContact(username) {}
 });

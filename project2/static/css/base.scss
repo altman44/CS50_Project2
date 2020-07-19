@@ -2,6 +2,7 @@ $body-color: #0f0627;
 $color-primary: rgb(18, 212, 147);
 $color-primary-soft: rgba(18, 212, 147, 0.5);
 $color-secondary: rgb(238, 196, 8);
+$btn-fontColor: #ffffff;
 
 @keyframes animatetop {
     from {
@@ -38,6 +39,29 @@ $color-secondary: rgb(238, 196, 8);
     .card-body {
         background-color: $color-primary;
     }
+}
+
+.btn-flat {
+    border: thick;
+    border-radius: 5px;
+    color: $btn-fontColor;
+    font-size: 100%;
+}
+
+.btn-flat-primary {
+    background-color: $color-primary;
+}
+
+.btn-flat-secondary {
+    background-color: $color-secondary;
+}
+
+.btn-flat-backdrop {
+    background-color: $body-color;
+}
+
+.flat-title {
+    font: small-caps 3vw fantasy, 'Gill Sans', 'Calibri', sans-serif;
 }
 
 .div-input {
