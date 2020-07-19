@@ -9,6 +9,25 @@ Chat
 {% endblock title %}
 
 {% block body %}
+<div id="modal-userData" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modal-userData-title" class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Body</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Agregar a contactos</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Mandar mensaje</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="chat-main-div">
     <div class="container-fluid justify-content-around">
         <div id="col-chat" class="col">
@@ -20,7 +39,8 @@ Chat
                         </div>
                         <div id="chat-div-chat">
                             <div id="chat-div-messages">
-                                <nav id="chat-div-messages-navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+                                <nav id="chat-div-messages-navbar"
+                                    class="navbar navbar-expand-lg navbar-light bg-light">
                                     <a id="chat-title-with-who" class="navbar-brand" href="#">{{ session.username }}</a>
                                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                                         data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
@@ -31,14 +51,16 @@ Chat
                                         <div class="navbar-nav navbar-container">
                                             <!-- <a class="nav-item nav-link active" href="#">Search users<span class="sr-only">(current)</span></a> -->
                                             <div class="div-input-search">
-                                                <input id="input-search-users" class="form-control m-2 input-search" type="search" list="list-users" placeholder="Search friends!" aria-label="Search" autocomplete="off">
+                                                <input id="input-search-users" class="form-control m-2 input-search"
+                                                    type="search" list="list-users" placeholder="Search friends!"
+                                                    aria-label="Search" autocomplete="off">
                                                 <datalist id="list-users"></datalist>
                                             </div>
                                         </div>
                                     </div>
                                 </nav>
                                 <div id="chat-div-messages-inside">
-                                    
+
                                 </div>
                                 <div id="chat-div-submit" class="row input-group mb-3 p-0 m-0">
                                     <div class="col-11 p-0 m-0">

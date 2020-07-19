@@ -145,7 +145,7 @@ class User():
 
     def serialize(self):
         return {
-            'id': self.__id,
+            # 'id': self.__id,
             'username': self.__username
         }
 
@@ -164,6 +164,9 @@ class Contact():
 
     def getUser(self):
         return self.__user
+
+    def getUsername(self):
+        return self.__user.getUsername()
     
     def getChat(self):
         return self.__chat

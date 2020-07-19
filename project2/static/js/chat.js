@@ -44,10 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let userTitle;
 
         divUsers.innerHTML = '';
-        console.log(sessionStorage);
         const contacts = JSON.parse(sessionStorage.getItem('contacts'));
         contacts.forEach(contact => {
-            console.log(contact);
             divUser = document.createElement('div');
             divUser.setAttribute('class', 'div-user');
             userTitle = document.createElement('p');
@@ -115,7 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const divMessages = document.querySelector('#chat-div-messages-inside');
 
         if (divMessages.style.overflowY === '') {
-            console.log('entro');
             divMessages.style.overflowY = 'scroll';
             divMessages.style.overFlowX = 'hidden';
             divMessages.scrollBehavior = 'smooth';
@@ -157,25 +154,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // prettier-ignore
-    document.querySelector('#input-search-users')
-        .addEventListener('input', function(event) {
+    const inputSearchUsers = document.querySelector('#input-search-users');
+
+    inputSearchUsers.addEventListener('input', function (event) {
+        const searchedUsername = this.value;
+        if (!event.inputType) {
+            // it means a datalist option was selected
+            showUserData(searchedUsername);
+        } else {
+            searchUsers(searchedUsername).then(usernames => {
+                const dataList = document.querySelector('#list-users');
+                appendOptionsToDataList(dataList, usernames);
+            });
+        }
+    });
+
+    inputSearchUsers.addEventListener('keypress', function (event) {
+        if (event.keyCode === 13) {
             const searchedUsername = this.value;
-            if (!event.inputType) {
-                // it means a datalist option was selected
-                showUserData(searchedUsername);
-            } else {
-                searchUsers(searchedUsername)
-                .then(usernames => {
-                    const dataList = document.querySelector('#list-users');
-                    appendOptionsToDataList(dataList, usernames);
-                })
-            }
-        });
+            showUserData(searchedUsername);
+        }
+    });
 
     function searchUsers(searched) {
         return new Promise((resolve, reject) => {
-            socket.emit('search user', { searched }, usernames => {
+            socket.emit('search users', { searched }, usernames => {
                 resolve(usernames);
             });
         });
@@ -185,15 +188,19 @@ document.addEventListener('DOMContentLoaded', () => {
         dataList.innerHTML = '';
         array.forEach(element => {
             let newOption = document.createElement('option');
-            newOption.addEventListener('onclick', () => {
-                console.log('hey');
-            });
             newOption.value = element;
             dataList.appendChild(newOption);
         });
     }
 
     function showUserData(username) {
-
+        socket.emit('search user data', { username }, data => {
+            console.log(data);
+            if (data.user) {
+                $('#modal-userData').modal('show');
+                const titleUser = document.querySelector('#modal-userData-title');
+                titleUser.textContent = data.user.username;
+            }
+        });
     }
 });

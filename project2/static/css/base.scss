@@ -3,6 +3,17 @@ $color-primary: rgb(18, 212, 147);
 $color-primary-soft: rgba(18, 212, 147, 0.5);
 $color-secondary: rgb(238, 196, 8);
 
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0;
+    }
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
 #body {
     background-color: $body-color;
     font-family: fantasy;
@@ -46,7 +57,7 @@ $color-secondary: rgb(238, 196, 8);
 }
 
 .div-input-search {
-  width: 25%;
+    width: 25%;
 }
 
 /* scrollbar width */
