@@ -22,6 +22,7 @@ def before_first_request():
     session['activeUser'] = False
     session['user'] = None
     session['currentChatId'] = -1
+    session['currentChatUser'] = None
     print(session)
     
 import routes.main

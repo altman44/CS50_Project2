@@ -77,17 +77,28 @@ def message(data):
                 senderUsername = session['user'].getUsername()
                 dataMessage = {
                     "senderUsername": senderUsername,
-                    'message': message,
-                    'username': session['user'].getUsername()
+                    'message': message
                 }
                 currentChat.submitMessage(senderUsername, message)
                 emit('message submitted', dataMessage, room=chatId)
     elif chatId == ChatId.WAITING:
-        currentChatUser = session['currentChatUser']
-        if currentChatUser:
-            username = session['user'].getUsername()
-            createdChat = flat.addChat([username, currentChatUser.getUsername()])
-            
+        if message:
+            currentChatUser = session['currentChatUser']
+            if currentChatUser:
+                users = [session['user'], currentChatUser]
+                username = session['user'].getUsername()
+                currentChatUsername = currentChatUser.getUsername()
+                createdChat = flat.addChat([username, currentChatUsername])
+                chatId = createdChat.getId()
+                for user in users:
+                    user.addChat(createdChat)
+                dataMessage = {
+                    'senderUsername': username,
+                    'message': message
+                }
+                createdChat.submitMessage(username, message)
+                session['currentChatUser'] = None
+                emit('message submitted', dataMessage, room=chatId)
 
 @socketio.on('search users')
 def searchUser(data):
@@ -103,35 +114,37 @@ def searchUserData(data):
     username = data['username']
     userData = {}
     foundUser = None
-    isContact = True
 
-    foundUser = session['user'].searchContact(username)
+    searched = searchUser(session['user'])
+    foundUser = searched[0]
+    isContact = searched[1]
 
     if foundUser:
-        userData = foundUser.serialize()
-    else:
-        isContact = False
-        foundUser = flat.searchUserByUsername(username)
-        if foundUser:
-            userData['user'] = foundUser.serialize()
+        serializedUser = foundUser.serialize()
+        if isContact:
+            userData = serializedUser
+        else:
+            userData['user'] = serializedUser
 
     userData['isContact'] = isContact
-
     return userData
 
-@socketio.on('open chat')
+@socketio.on('open empty chat')
 def changeCurrentChatId(username):
-    foundUser = session['user'].searchContact(username)
-    if not foundUser:
-        foundUser = flat.searchUserByUsername(username)
+    foundUser = searchUser(session['user'])[0]
     
     if foundUser:
         session['currentChatUser'] = foundUser
 
-@socketio.on('create chat')
-def createChat(username):
-    return 0
-
 @app.route('/searchUsername', methods=['POST'])
 def searchCurrentUsername():
     return session['user'].getUsername()
+
+def searchUser(userInstance):
+    """Search in contacts first, if it isn't there, throughout the application"""
+    isContact = True
+    foundUser = userInstance.searchContact(username)
+    if not foundUser:
+        isContact = False
+        foundUser = flat.searchUserByUsername(username)
+    return (foundUser, isContact)

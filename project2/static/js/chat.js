@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadEmptyChat(username) {
-        socket.emit('open chat', { username }, () => {
+        socket.emit('open empty chat', { username }, () => {
             resetChat();
             showChatComponents(username);
         });
