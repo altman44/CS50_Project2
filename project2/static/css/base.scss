@@ -45,7 +45,7 @@ $btn-fontColor: #ffffff;
     border: thick;
     border-radius: 5px;
     color: $btn-fontColor;
-    font-size: 100%;
+    font: 1.6vw fantasy;
 }
 
 .btn-flat-primary {
@@ -61,7 +61,7 @@ $btn-fontColor: #ffffff;
 }
 
 .flat-title {
-    font: small-caps 3vw fantasy, 'Gill Sans', 'Calibri', sans-serif;
+    font: 3vw fantasy, 'Gill Sans', 'Calibri', sans-serif;
 }
 
 .div-input {

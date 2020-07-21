@@ -1,5 +1,6 @@
 from application import app, session, flat, socketio, emit, send, flash, render_template, request, redirect, url_for, join_room, leave_room
 from models.chat import *
+from helpers.chatId_enum import ChatId
 
 @app.route('/chat', methods=['GET', 'POST'])
 def login():
@@ -68,17 +69,25 @@ def message(data):
     chatId = session['currentChatId']
     message = data['message']
     print('chatId: ', chatId)
-    if message and chatId != -1:
-        currentChat = session['user'].searchChat(chatId)
-        if currentChat:
-            senderUsername = session['user'].getUsername()
-            dataMessage = {
-                "senderUsername": senderUsername,
-                'message': message,
-                'username': session['user'].getUsername()
-            }
-            currentChat.submitMessage(senderUsername, message)
-            emit('message submitted', dataMessage, room=chatId)
+    
+    if chatId >= ChatId.OK_MIN:
+        if message:
+            currentChat = session['user'].searchChat(chatId)
+            if currentChat:
+                senderUsername = session['user'].getUsername()
+                dataMessage = {
+                    "senderUsername": senderUsername,
+                    'message': message,
+                    'username': session['user'].getUsername()
+                }
+                currentChat.submitMessage(senderUsername, message)
+                emit('message submitted', dataMessage, room=chatId)
+    elif chatId == ChatId.WAITING:
+        currentChatUser = session['currentChatUser']
+        if currentChatUser:
+            username = session['user'].getUsername()
+            createdChat = flat.addChat([username, currentChatUser.getUsername()])
+            
 
 @socketio.on('search users')
 def searchUser(data):
@@ -91,25 +100,35 @@ def searchUser(data):
 
 @socketio.on('search user data')
 def searchUserData(data):
-    print(data)
     username = data['username']
     userData = {}
     foundUser = None
     isContact = True
 
     foundUser = session['user'].searchContact(username)
-    if not foundUser:
+
+    if foundUser:
+        userData = foundUser.serialize()
+    else:
         isContact = False
+        foundUser = flat.searchUserByUsername(username)
+        if foundUser:
+            userData['user'] = foundUser.serialize()
+
+    userData['isContact'] = isContact
+
+    return userData
+
+@socketio.on('open chat')
+def changeCurrentChatId(username):
+    foundUser = session['user'].searchContact(username)
+    if not foundUser:
         foundUser = flat.searchUserByUsername(username)
     
     if foundUser:
-        userData = foundUser.serialize()
-        userData['isContact'] = isContact
+        session['currentChatUser'] = foundUser
 
-    print(userData['isContact'])
-    return userData
-
-@socketio.on('/createChat')
+@socketio.on('create chat')
 def createChat(username):
     return 0
 

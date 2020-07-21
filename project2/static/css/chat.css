@@ -1,3 +1,13 @@
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
 #body {
   background-color: #0f0627;
   font-family: fantasy;
@@ -24,6 +34,29 @@
   background-color: #12d493;
 }
 
+.btn-flat {
+  border: thick;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 100%;
+}
+
+.btn-flat-primary {
+  background-color: #12d493;
+}
+
+.btn-flat-secondary {
+  background-color: #eec408;
+}
+
+.btn-flat-backdrop {
+  background-color: #0f0627;
+}
+
+.flat-title {
+  font: 3vw fantasy, "Gill Sans", "Calibri", sans-serif;
+}
+
 .div-input {
   padding: 10px;
 }
@@ -38,7 +71,8 @@
   flex-direction: row;
   justify-content: flex-end;
 }
-.navbar-container .div-input-search {
+
+.div-input-search {
   width: 25%;
 }
 
@@ -79,7 +113,7 @@
   margin-bottom: 2vh;
 }
 #chat-main-div .col .chat-div-titles .chat-titles {
-  font: small-caps 2.5vw fantasy, "Gill Sans", "Calibri", sans-serif;
+  font: 2.5vw fantasy, "Gill Sans", "Calibri", sans-serif;
   margin: 2vh 0 0 0;
 }
 #chat-main-div .col #chat-div-chat #chat-div-messages {

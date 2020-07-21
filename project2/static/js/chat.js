@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('fetch messages', { chatId }, data => {
             if (data) {
                 const username = sessionStorage.getItem('username');
-                showChatHeader(username);
+                showChatComponents(username);
                 if (data.chat) {
                     const messages = data.chat.messages;
                     if (messages) {
@@ -133,9 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             );
                         });
                     }
-                    // prettier-ignore
-                    document.querySelector('#chat-div-submit').style.visibility = 'visible';
-                    document.querySelector('#input-message').focus();
+                    showChatSubmitComponent();
                 }
             }
         });
@@ -146,9 +144,16 @@ document.addEventListener('DOMContentLoaded', () => {
         divMessages.innerHTML = '';
     }
 
-    function showChatHeader(username) {
+    function showChatComponents(username) {
         // prettier-ignore
         document.querySelector('#chat-title-with-who').textContent = username;
+        showChatSubmitComponent();
+    }
+
+    function showChatSubmitComponent() {
+        // prettier-ignore
+        document.querySelector('#chat-div-submit').style.visibility = 'visible';
+        document.querySelector('#input-message').focus();
     }
 
     // prettier-ignore
@@ -201,17 +206,16 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('search user data', { username }, data => {
             console.log(data);
             if (data.user) {
-                const username = data.user.username;
+                const user = data.user;
+                const username = user.username;
                 const isContact = data.isContact;
-                const chat = data.chat;
 
                 // prettier-ignore
                 const titleUser = document.querySelector('#modal-userData-title');
                 // prettier-ignore
                 const btnContact = document.querySelector('#modal-userData-btnContact');
-                const btnChat = document.querySelector(
-                    '#modal-userData-btnChat'
-                );
+                // prettier-ignore
+                const btnChat = document.querySelector('#modal-userData-btnChat');
 
                 // Showing modal
                 $('#modal-userData').modal('show');
@@ -228,19 +232,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         btnContact.onclick = addContact(username);
                     }
                 }
-                if (chat) {
-                    btnChat.onclick = loadChatUser(chat.id);
+                if (data.chat) {
+                    btnChat.onclick = () => {
+                        loadChatUser(data.chat.id);
+                    };
                 } else {
-                    btnChat.onclick = loadEmptyChat(username);
+                    btnChat.onclick = () => {
+                        loadEmptyChat(username);
+                    };
                 }
             }
         });
     }
 
     function loadEmptyChat(username) {
-        resetChat();
-        showChatHeader(username);
-    };
+        socket.emit('open chat', { username }, () => {
+            resetChat();
+            showChatComponents(username);
+        });
+    }
 
     function addContact(username) {}
 

@@ -107,7 +107,8 @@ class User():
         return contacts
 
     def addChat(self, chat):
-        self.__chats.append(chat)
+        if chat:
+            self.__chats.append(chat)
 
     def searchChat(self, chatId):
         i = 0
