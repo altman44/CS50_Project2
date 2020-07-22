@@ -31,7 +31,7 @@ def login():
 
         createdChat = flat.addChat([user])
         user.addContact(user, createdChat)
-        createdChat.submitMessage(username, "Por este chat podés enviarte mensajes a vos mismo")
+        createdChat.submitMessage(username, "By this chat, you can send messages to yourself")
 
         session['user'] = user
         session['activeUser'] = True
@@ -81,28 +81,28 @@ def message(data):
                 }
                 currentChat.submitMessage(senderUsername, message)
                 emit('message submitted', dataMessage, room=chatId)
-    elif chatId == ChatId.WAITING:
-        if message:
-            currentChatUser = session['currentChatUser']
-            if currentChatUser:
-                users = [session['user'], currentChatUser]
-                username = session['user'].getUsername()
-                currentChatUsername = currentChatUser.getUsername()
-                createdChat = flat.addChat([username, currentChatUsername])
-                chatId = createdChat.getId()
-                for user in users:
-                    user.addChat(createdChat)
-                dataMessage = {
-                    'senderUsername': username,
-                    'message': message
-                }
-                createdChat.submitMessage(username, message)
-                session['currentChatUser'] = None
-                emit('message submitted', dataMessage, room=chatId)
+    # elif chatId == ChatId.WAITING:
+    #     if message:
+    #         currentChatUser = session['currentChatUser']
+    #         if currentChatUser:
+    #             users = [session['user'], currentChatUser]
+    #             createdChat = flat.addChat(users)
+    #             for user in users:
+    #                 user.addChat(createdChat)
+    #             chatId = createdChat.getId()
+    #             username = session['user'].getUsername()
+    #             dataMessage = {
+    #                 'senderUsername': username,
+    #                 'message': message
+    #             }
+    #             createdChat.submitMessage(username, message)
+    #             join_room(chatId)
+    #             session['currentChatUser'] = None
+    #             session['currentChatId'] = chatId
+    #             emit('message submitted', dataMessage, room=chatId)
 
 @socketio.on('search users')
 def searchUser(data):
-    print(data)
     MAX_NUMBER_SEARCH_USERS = 10
     users = []
     if 'searched' in data and data['searched']:
@@ -114,34 +114,57 @@ def searchUserData(data):
     username = data['username']
     userData = {}
     foundUser = None
+    print('session', session['user'])
+    if username:
+        searched = searchUser(session['user'], username)
+        foundUser = searched[0]
+        isContact = searched[1]
 
-    searched = searchUser(session['user'])
-    foundUser = searched[0]
-    isContact = searched[1]
+        if foundUser:
+            serializedUser = foundUser.serialize()
+            if isContact:
+                userData = serializedUser
+            else:
+                print('ey')
+                userData['user'] = serializedUser
+                chat = session['user'].searchChatWith(foundUser)
+                print('chat: ', chat)
+                if chat:
+                    userData['chat'] = chat.serialize()
 
-    if foundUser:
-        serializedUser = foundUser.serialize()
-        if isContact:
-            userData = serializedUser
-        else:
-            userData['user'] = serializedUser
-
-    userData['isContact'] = isContact
+        userData['isContact'] = isContact
+        # userData['chatId'] = session['currentChatId']
+        # userData['enumChatId'] = ChatId
     return userData
 
-@socketio.on('open empty chat')
-def changeCurrentChatId(username):
-    foundUser = searchUser(session['user'])[0]
-    
-    if foundUser:
-        session['currentChatUser'] = foundUser
+@socketio.on('create chat')
+def createChat(data):
+    username = data['username']
+    if username:
+        foundUser = searchUser(session['user'], username)[0]
+        if foundUser:
+            users = [session['user'], foundUser]
+            foundChat = session['user'].searchChatWith(foundUser)
+            if foundChat:
+                chatId = foundChat.getId()
+            else:
+                createdChat = flat.addChat(users)
+                chatId = createdChat.getId()
 
-@app.route('/searchUsername', methods=['POST'])
-def searchCurrentUsername():
-    return session['user'].getUsername()
+            if data['joinChat']:
+                if session['currentChatId'] >= ChatId.OK_MIN:
+                    leave_room(session['currentChatId'])
+                join_room(chatId)
+                session['currentChatId'] = chatId
+            # session['currentChatUser'] = foundUser
+            # session['currentChatId'] = ChatId.WAITING
 
-def searchUser(userInstance):
-    """Search in contacts first, if it isn't there, throughout the application"""
+# @app.route('/searchUsername', methods=['POST'])
+# def searchCurrentUsername():
+#     return session['user'].getUsername()
+
+def searchUser(userInstance, username):
+    """Search in contacts first, if it isn't there, throughout the application."""
     isContact = True
     foundUser = userInstance.searchContact(username)
     if not foundUser:

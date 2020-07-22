@@ -1,6 +1,5 @@
-from enum import Enum
+from enum import IntEnum
 
-class ChatId(Enum):
+class ChatId(IntEnum):
     OK_MIN = 0
     NONE = -1
-    WAITING = -2

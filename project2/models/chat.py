@@ -108,7 +108,9 @@ class User():
 
     def addChat(self, chat):
         if chat:
+            print('chat added to ', self.getUsername())
             self.__chats.append(chat)
+            print('now chats: ', self.__chats)
 
     def searchChat(self, chatId):
         i = 0
@@ -125,6 +127,20 @@ class User():
             pass
         finally:
             return foundChat
+
+    def searchChatWith(self, user):
+        chat = None
+        if user:
+            i = 0
+            users = [self, user]
+            print(f'chats del usuario {self}: {self.__chats}')
+            while i < len(self.__chats) and not chat:
+                currentChat = self.__chats[i]
+                # print('same users: ', currentChat.sameUsers(users))
+                if currentChat.sameUsers(users):
+                    chat = currentChat
+                i += 1
+        return chat
 
     def addContact(self, user, chat):
         newContact = None
@@ -146,7 +162,6 @@ class User():
 
     def serialize(self):
         return {
-            # 'id': self.__id,
             'username': self.__username
         }
 
@@ -206,7 +221,6 @@ class Message():
 class Chat():
     def __init__(self, id, users):
         self.__id = id
-        print('users: ', users)
         self.setUsers(users)
         self.setMessages([])
     
@@ -222,6 +236,31 @@ class Chat():
 
     def getId(self):
         return self.__id
+
+    def sameUsers(self, users):
+        j = 0
+        k = 0
+        counter = 0
+        repeated = True
+        print('enviados: ', users)
+        print('originales: ', self.__users)
+        if len(users) == len(self.__users):
+            addedUsers = []
+            while j < len(self.__users) and repeated:
+                repeated = False
+                currentUser = self.__users[j]
+                k = 0
+                while k < len(users) and not repeated:
+                    print('currentUser: ', currentUser)
+                    print('user: ', user)
+                    if currentUser not in addedUsers and currentUser.getUsername() == users[k].getUsername():
+                        counter += 1
+                        repeated = True
+                        addedUsers.append(currentUser)
+                    k += 1
+                j += 1
+            return counter == len(self.__users)
+        return False
 
     def submitMessage(self, senderUsername, message):
         createdMsg = None

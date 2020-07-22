@@ -4,6 +4,7 @@ from flask import Flask, flash, render_template, request, redirect, url_for, ses
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
 from flask_session import Session
 from models.chat import Flat
+from helpers.chatId_enum import ChatId
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -21,8 +22,8 @@ flat = Flat()
 def before_first_request():
     session['activeUser'] = False
     session['user'] = None
-    session['currentChatId'] = -1
-    session['currentChatUser'] = None
+    session['currentChatId'] = ChatId.NONE
+    # session['currentChatUser'] = None
     print(session)
     
 import routes.main

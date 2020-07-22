@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('disconnect', () => {
-        console.log('DISCONNECTION, you cannot send messages!');
+        console.log('DISCONNECTION, messages cannot be sent!');
+        location.reload();
     });
 
     socket.on('contacts', data => {
@@ -28,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('message submitted', data => {
+        console.log(data);
         // Show message sent by another user or the user itself
         const sender = data.senderUsername;
         // prettier-ignore
@@ -246,7 +248,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadEmptyChat(username) {
-        socket.emit('open empty chat', { username }, () => {
+        const joinChat = true;
+        socket.emit('create chat', { username, joinChat }, () => {
             resetChat();
             showChatComponents(username);
         });
