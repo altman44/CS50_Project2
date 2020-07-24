@@ -108,9 +108,7 @@ class User():
 
     def addChat(self, chat):
         if chat:
-            print('chat added to ', self.getUsername())
             self.__chats.append(chat)
-            print('now chats: ', self.__chats)
 
     def searchChat(self, chatId):
         i = 0
@@ -133,10 +131,8 @@ class User():
         if user:
             i = 0
             users = [self, user]
-            print(f'chats del usuario {self}: {self.__chats}')
             while i < len(self.__chats) and not chat:
                 currentChat = self.__chats[i]
-                # print('same users: ', currentChat.sameUsers(users))
                 if currentChat.sameUsers(users):
                     chat = currentChat
                 i += 1
@@ -242,8 +238,6 @@ class Chat():
         k = 0
         counter = 0
         repeated = True
-        print('enviados: ', users)
-        print('originales: ', self.__users)
         if len(users) == len(self.__users):
             addedUsers = []
             while j < len(self.__users) and repeated:
@@ -251,8 +245,6 @@ class Chat():
                 currentUser = self.__users[j]
                 k = 0
                 while k < len(users) and not repeated:
-                    print('currentUser: ', currentUser)
-                    print('user: ', user)
                     if currentUser not in addedUsers and currentUser.getUsername() == users[k].getUsername():
                         counter += 1
                         repeated = True

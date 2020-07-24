@@ -20,11 +20,8 @@ flat = Flat()
 # Routes
 @app.before_first_request
 def before_first_request():
-    # session['activeUser'] = False
     session['username'] = None
     session['currentChatId'] = ChatId.NONE
-    # session['currentChatUser'] = None
-    print(session)
     
 import routes.main
 import routes.chat

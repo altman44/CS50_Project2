@@ -42,7 +42,8 @@ def login():
 @socketio.on('fetch contacts')
 def fetchContacts():
     username = session['username']
-    user = searchUser(None, username)
+    user = searchUser(None, username)[0]
+    print(user)
     if user:
         contacts = user.getContacts()
         data = {
@@ -73,7 +74,6 @@ def fetchMessages(data):
 def message(data):
     chatId = session['currentChatId']
     message = data['message']
-    print('chatId: ', chatId)
     
     if chatId >= ChatId.OK_MIN:
         if message:
@@ -123,7 +123,6 @@ def searchUserData(data):
     username = data['username']
     userData = {}
     foundUser = None
-    # print('session', session['user'])
     if username:
         user = searchUser(None, session['username'])[0]
         if user:
@@ -136,10 +135,8 @@ def searchUserData(data):
                 if isContact:
                     userData = serializedUser
                 else:
-                    print('ey')
                     userData['user'] = serializedUser
                     chat = user.searchChatWith(foundUser)
-                    print('chat: ', chat)
                     if chat:
                         userData['chat'] = chat.serialize()
 
