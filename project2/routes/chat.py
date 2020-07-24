@@ -42,12 +42,14 @@ def login():
 @socketio.on('fetch contacts')
 def fetchContacts():
     username = session['username']
-    contacts = session['user'].getContacts()
-    data = {
-        'username': username,
-        'contacts': contacts
-    }
-    emit('contacts', data)
+    user = searchUser(None, username)
+    if user:
+        contacts = user.getContacts()
+        data = {
+            'username': username,
+            'contacts': contacts
+        }
+        emit('contacts', data)
 
 @socketio.on('fetch messages')
 def fetchMessages(data):
