@@ -136,7 +136,7 @@ def searchUserData(data):
                 else:
                     print('ey')
                     userData['user'] = serializedUser
-                    chat = session['user'].searchChatWith(foundUser)
+                    chat = user.searchChatWith(foundUser)
                     print('chat: ', chat)
                     if chat:
                         userData['chat'] = chat.serialize()
