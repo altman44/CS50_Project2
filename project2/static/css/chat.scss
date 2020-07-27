@@ -33,7 +33,8 @@ $color-div-user-active: base.$color-primary-soft;
                 border-radius: 10px;
 
                 #chat-div-messages-navbar {
-                    background-color: base.$body-color;
+                    background-color: $color-chat;
+                    // height: 6vh;
                 }
 
                 #chat-div-messages-inside {

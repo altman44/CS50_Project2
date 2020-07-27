@@ -171,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchedUsername = this.value;
         if (!event.inputType) {
             // it means a datalist option was selected
+            this.value = '';
             showUserData(searchedUsername);
         } else {
             searchUsers(searchedUsername).then(usernames => {
@@ -183,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     inputSearchUsers.addEventListener('keypress', function (event) {
         if (event.keyCode === 13) {
             const searchedUsername = this.value;
+            this.value = '';
             showUserData(searchedUsername);
         }
     });

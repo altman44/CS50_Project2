@@ -22,7 +22,8 @@ Chat
                 <p>Body</p>
             </div>
             <div class="modal-footer">
-                <button id="modal-userData-btnContact" class="btn-flat" data-dismiss="modal" style="display:none;"></button>
+                <button id="modal-userData-btnContact" class="btn-flat" data-dismiss="modal"
+                    style="display:none;"></button>
                 <button id="modal-userData-btnChat" class="btn-flat btn-flat-primary" data-dismiss="modal">Chat</button>
             </div>
         </div>
@@ -39,22 +40,27 @@ Chat
                         </div>
                         <div id="chat-div-chat">
                             <div id="chat-div-messages">
-                                <nav id="chat-div-messages-navbar"
-                                    class="navbar navbar-expand-lg navbar-light bg-light">
-                                    <a id="chat-title-with-who" class="navbar-brand" href="#">{{ session.username }}</a>
-                                    <button class="navbar-toggler" type="button" data-toggle="collapse"
-                                        data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-                                        aria-expanded="false" aria-label="Toggle navigation">
-                                        <span class="navbar-toggler-icon"></span>
-                                    </button>
-                                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                                        <div class="navbar-nav navbar-container">
-                                            <!-- <a class="nav-item nav-link active" href="#">Search users<span class="sr-only">(current)</span></a> -->
-                                            <div class="div-input-search">
-                                                <input id="input-search-users" class="form-control m-2 input-search"
-                                                    type="search" list="list-users" placeholder="Search friends!"
-                                                    aria-label="Search" autocomplete="off">
-                                                <datalist id="list-users"></datalist>
+                                <nav id="chat-div-messages-navbar" class="">
+                                    <div class="row p-2">
+                                        <div class="d-flex align-items-center col-1">
+                                            <a id="chat-title-with-who" href="#"></a>
+                                        </div>
+                                        <div class="toogle-options row col-11">
+                                            <div id="toggler-content-chat"
+                                                class="toggler-content col-4">
+                                                <!-- <a class="nav-item nav-link active" href="#">Search users<span class="sr-only">(current)</span></a> -->
+                                                <div class="div-input-search">
+                                                    <input id="input-search-users" class="input-form" type="search"
+                                                        list="list-users" placeholder="Search friends!"
+                                                        aria-label="Search" autocomplete="off">
+                                                    <datalist id="list-users"></datalist>
+                                                </div>
+                                            </div>
+                                            <div class="toggler-area col-1">
+                                                <img class="toggler-options-arrow expand-options-arrow"
+                                                    data-target="#toggler-content-chat" />
+                                                <a href="https://icons8.com/icon/44002/flecha-ampliar"></a>
+                                                <a href="https://icons8.com/icon/49419/flecha-contraer"></a>
                                             </div>
                                         </div>
                                     </div>
@@ -93,4 +99,5 @@ Chat
     </div>
 </div>
 <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+<script src="{{ url_for('static', filename='js/components.js') }}"></script>
 {% endblock body %}

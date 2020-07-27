@@ -23,7 +23,7 @@ def login():
             flash("You must enter your username to login", 'danger')
             return redirect(url_for('index'))
         if flat.searchUserByUsername(username):
-            flash('The username already exists', 'danger')
+            flash('The username is already taken', 'danger')
             return redirect(url_for('index'))
 
         user = flat.searchUserByUsername(username)

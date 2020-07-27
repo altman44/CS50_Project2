@@ -1,3 +1,8 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
 @keyframes animatetop {
   from {
     top: -300px;
@@ -38,7 +43,7 @@
   border: thick;
   border-radius: 5px;
   color: #ffffff;
-  font: 1.6vw fantasy;
+  font: 16px fantasy;
 }
 
 .btn-flat-primary {
@@ -65,15 +70,65 @@
   font-weight: bold;
 }
 
-.navbar-container {
-  width: 100%;
+.input-form {
+  border: thin solid #eec408;
+  border-radius: 8px;
+  padding-left: 2%;
+  outline: none;
+  background-color: rgba(18, 212, 147, 0.5);
+}
+
+.input-form:focus {
+  border: medium solid #eec408;
+}
+
+.toogle-options {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+  align-items: center;
+  width: 90%;
+}
+
+.toggler-area {
+  display: none;
+  width: 100%;
+  align-items: center;
+}
+.toggler-area .toggler-options-arrow {
+  display: none;
+}
+.toggler-area .expand-options-arrow {
+  content: url("https://img.icons8.com/nolan/40/expand-arrow.png");
+}
+.toggler-area .collapse-options-arrow {
+  content: url("https://img.icons8.com/nolan/40/collapse-arrow.png");
+}
+.toggler-area :hover {
+  cursor: pointer;
+  -ms-transform: scale(1.08);
+  /* IE 9 */
+  -webkit-transform: scale(1.08);
+  /* Safari */
+  transform: scale(1.08);
+}
+
+.toggler-content {
+  width: 100%;
+}
+
+.expand {
+  display: block;
 }
 
 .div-input-search {
-  width: 25%;
+  width: 80%;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+.div-input-search #input-search-users {
+  width: 100%;
+  position: absolute;
+  right: 0;
 }
 
 /* scrollbar width */
@@ -96,6 +151,76 @@
 /* scrollbar Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background-color: #f7fafa;
+}
+
+@media screen and (min-width: 1024px) {
+  .btn-flat {
+    padding: 1vh 2vw;
+    letter-spacing: 1.5px;
+  }
+
+  .toggler-area {
+    display: none;
+  }
+  .toggler-area .toggler-options-arrow {
+    display: none;
+  }
+  .toggler-area .expand-options-arrow {
+    content: url("https://img.icons8.com/nolan/40/expand-arrow.png");
+  }
+  .toggler-area .collapse-options-arrow {
+    content: url("https://img.icons8.com/nolan/40/collapse-arrow.png");
+  }
+
+  .toggler-content {
+    display: block;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .btn-flat {
+    padding: 1vh 2.5vw;
+    letter-spacing: 1.4px;
+  }
+
+  .toggler-area {
+    display: none;
+  }
+  .toggler-area .toggler-options-arrow {
+    display: none;
+  }
+  .toggler-area .expand-options-arrow {
+    content: url("https://img.icons8.com/nolan/30/expand-arrow.png");
+  }
+  .toggler-area .collapse-options-arrow {
+    content: url("https://img.icons8.com/nolan/30/collapse-arrow.png");
+  }
+
+  .toggler-content {
+    display: block;
+  }
+}
+@media screen and (max-width: 768px) {
+  .btn-flat {
+    padding: 1vh 3vw;
+    letter-spacing: 1.3px;
+  }
+
+  .toggler-area {
+    display: block;
+  }
+  .toggler-area .toggler-options-arrow {
+    display: block;
+  }
+  .toggler-area .expand-options-arrow {
+    content: url("https://img.icons8.com/nolan/20/expand-arrow.png");
+  }
+  .toggler-area .collapse-options-arrow {
+    content: url("https://img.icons8.com/nolan/20/collapse-arrow.png");
+  }
+
+  .toggler-content {
+    display: none;
+  }
 }
 
 /*# sourceMappingURL=base.css.map */
