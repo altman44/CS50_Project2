@@ -76,21 +76,27 @@
   padding-left: 2%;
   outline: none;
   background-color: rgba(18, 212, 147, 0.5);
+  font-size: 100%;
 }
 
 .input-form:focus {
-  border: medium solid #eec408;
+  border: 2.5px solid #eec408;
+}
+
+.input {
+  font-size: 100%;
 }
 
 .toogle-options {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  width: 90%;
 }
 
 .toggler-area {
-  display: none;
+  display: flex;
   width: 100%;
+  justify-content: center;
   align-items: center;
 }
 .toggler-area .toggler-options-arrow {
@@ -113,22 +119,21 @@
 
 .toggler-content {
   width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .expand {
-  display: block;
+  display: flex !important;
 }
 
 .div-input-search {
   width: 80%;
   display: flex;
-  justify-content: right;
   align-items: center;
 }
 .div-input-search #input-search-users {
   width: 100%;
-  position: absolute;
-  right: 0;
 }
 
 /* scrollbar width */
@@ -173,7 +178,7 @@
   }
 
   .toggler-content {
-    display: block;
+    display: flex;
   }
 }
 @media screen and (max-width: 1024px) {
@@ -196,7 +201,7 @@
   }
 
   .toggler-content {
-    display: block;
+    display: flex;
   }
 }
 @media screen and (max-width: 768px) {
@@ -206,16 +211,16 @@
   }
 
   .toggler-area {
-    display: block;
+    display: flex;
   }
   .toggler-area .toggler-options-arrow {
     display: block;
   }
   .toggler-area .expand-options-arrow {
-    content: url("https://img.icons8.com/nolan/20/expand-arrow.png");
+    content: url("https://img.icons8.com/nolan/25/expand-arrow.png");
   }
   .toggler-area .collapse-options-arrow {
-    content: url("https://img.icons8.com/nolan/20/collapse-arrow.png");
+    content: url("https://img.icons8.com/nolan/25/collapse-arrow.png");
   }
 
   .toggler-content {

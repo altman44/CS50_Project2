@@ -20,6 +20,10 @@ $btn-fontColor: #ffffff;
     }
 }
 
+@mixin input-class {
+    font-size: 100%;
+}
+
 #body {
     background-color: $body-color;
     font-family: fantasy;
@@ -84,33 +88,29 @@ $btn-fontColor: #ffffff;
     padding-left: 2%;
     outline: none;
     background-color: $color-primary-soft;
+    @include input-class;
 }
 .input-form:focus {
-    border: medium solid $color-secondary;
+    border: 2.5px solid $color-secondary;
 }
-// .navbar-container {
-//     width: 100%;
-//     display: flex;
-//     flex-direction: row;
-//     justify-content: flex-end;
-// }
+.input {
+    @include input-class;
+}
 
 .toogle-options {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
-    width: 90%;
-    // padding: 2%;
 }
 
 .toggler-area {
-    display: none;
+    display: flex;
     width: 100%;
+    justify-content: center;
     align-items: center;
-    // justify-content: right;
 
     .toggler-options-arrow {
         display: none;
-        // right: 2%;
     }
 
     .expand-options-arrow {
@@ -131,23 +131,21 @@ $btn-fontColor: #ffffff;
 
 .toggler-content {
     width: 100%;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .expand {
-    // display: block !important;
-    display: block;
+    display: flex !important;
 }
 
 .div-input-search {
     width: 80%;
     display: flex;
-    justify-content: right;
     align-items: center;
 
     #input-search-users {
         width: 100%;
-        position: absolute;
-        right: 0;
     }
 }
 
@@ -193,7 +191,7 @@ $btn-fontColor: #ffffff;
         }
     }
     .toggler-content {
-        display: block;
+        display: flex;
     }
 }
 // < 1024px
@@ -217,7 +215,7 @@ $btn-fontColor: #ffffff;
         }
     }
     .toggler-content {
-        display: block;
+        display: flex;
     }
 }
 // < 768px
@@ -227,17 +225,17 @@ $btn-fontColor: #ffffff;
         letter-spacing: 1.3px;
     }
     .toggler-area {
-        display: block;
+        display: flex;
 
         .toggler-options-arrow {
             display: block;
         }
         .expand-options-arrow {
-            content: url('https://img.icons8.com/nolan/20/expand-arrow.png');
+            content: url('https://img.icons8.com/nolan/25/expand-arrow.png');
         }
 
         .collapse-options-arrow {
-            content: url('https://img.icons8.com/nolan/20/collapse-arrow.png');
+            content: url('https://img.icons8.com/nolan/25/collapse-arrow.png');
         }
     }
     .toggler-content {

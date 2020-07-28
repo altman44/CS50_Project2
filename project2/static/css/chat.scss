@@ -34,7 +34,8 @@ $color-div-user-active: base.$color-primary-soft;
 
                 #chat-div-messages-navbar {
                     background-color: $color-chat;
-                    // height: 6vh;
+                    height: auto;
+                    border-radius: 10px;
                 }
 
                 #chat-div-messages-inside {
@@ -81,21 +82,26 @@ $color-div-user-active: base.$color-primary-soft;
                 visibility: hidden;
 
                 #input-message {
-                    font-size: 100%;
+                    width: 100%;
                     height: 100%;
-                    padding: 0;
-                    margin: 0;
                     background-color: inherit;
-                    border: 0;
-                    padding: 1%;
+                    border: none;
+                    padding-left: .5%;
                 }
 
-                #btn-submit-msg {
-                    overflow: hidden;
-                    background-color: inherit;
-                    img {
-                        width: 50%;
-                        height: 50%;
+                #chat-div-submit-btn {
+
+                    #btn-submit-msg {
+                        overflow: hidden;
+                        background-color: inherit;
+                        border: none;
+                        width: 100%;
+    
+                        img {
+                            content: url("https://img.icons8.com/nolan/64/filled-sent.png");
+                            width: 100%;
+                            height: 100%;
+                        }
                     }
                 }
             }
@@ -133,3 +139,35 @@ $color-div-user-active: base.$color-primary-soft;
         
     }   
 }
+// @media screen and (min-width: 1200px) {
+//     #btn-submit-msg {
+//         img {
+//             width: 30px !important;
+//             height: 30px !important;
+//         }
+//     }
+// }
+// @media screen and (min-width: 992px) {
+//     #btn-submit-msg {
+//         img {
+//             width: 25px !important;
+//             height: 25px !important;
+//         }
+//     }
+// }
+// @media screen and (min-width: 768px) {
+//     #btn-submit-msg {
+//         img {
+//             width: 20px !important;
+//             height: 20px !important;
+//         }
+//     }
+// }
+// @media screen and (max-width: 576px) {
+//     #btn-submit-msg {
+//         img {
+//             width: 15px !important;
+//             height: 15px !important;
+//         }
+//     }
+// }

@@ -76,28 +76,31 @@
   padding-left: 2%;
   outline: none;
   background-color: rgba(18, 212, 147, 0.5);
+  font-size: 100%;
 }
 
 .input-form:focus {
-  border: medium solid #eec408;
+  border: 2.5px solid #eec408;
+}
+
+.input {
+  font-size: 100%;
 }
 
 .toogle-options {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 80%;
-  padding: 2%;
 }
 
 .toggler-area {
-  display: none;
+  display: flex;
   width: 100%;
-  height: 100%;
+  justify-content: center;
+  align-items: center;
 }
 .toggler-area .toggler-options-arrow {
   display: none;
-  right: 2%;
 }
 .toggler-area .expand-options-arrow {
   content: url("https://img.icons8.com/nolan/40/expand-arrow.png");
@@ -116,18 +119,21 @@
 
 .toggler-content {
   width: 100%;
-  padding: 0;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .expand {
-  display: block !important;
+  display: flex !important;
 }
 
 .div-input-search {
-  width: 98%;
+  width: 80%;
+  display: flex;
+  align-items: center;
 }
 .div-input-search #input-search-users {
-  width: 98%;
+  width: 100%;
 }
 
 /* scrollbar width */
@@ -172,7 +178,7 @@
   }
 
   .toggler-content {
-    display: block;
+    display: flex;
   }
 }
 @media screen and (max-width: 1024px) {
@@ -195,7 +201,7 @@
   }
 
   .toggler-content {
-    display: block;
+    display: flex;
   }
 }
 @media screen and (max-width: 768px) {
@@ -211,10 +217,10 @@
     display: block;
   }
   .toggler-area .expand-options-arrow {
-    content: url("https://img.icons8.com/nolan/20/expand-arrow.png");
+    content: url("https://img.icons8.com/nolan/25/expand-arrow.png");
   }
   .toggler-area .collapse-options-arrow {
-    content: url("https://img.icons8.com/nolan/20/collapse-arrow.png");
+    content: url("https://img.icons8.com/nolan/25/collapse-arrow.png");
   }
 
   .toggler-content {
@@ -247,6 +253,8 @@
 }
 #chat-main-div .col #chat-div-chat #chat-div-messages #chat-div-messages-navbar {
   background-color: #e0f1f1;
+  height: auto;
+  border-radius: 10px;
 }
 #chat-main-div .col #chat-div-chat #chat-div-messages #chat-div-messages-inside {
   background-color: #0d0523;
@@ -279,21 +287,24 @@
   visibility: hidden;
 }
 #chat-main-div .col #chat-div-chat #chat-div-submit #input-message {
-  font-size: 100%;
+  width: 100%;
   height: 100%;
-  padding: 0;
-  margin: 0;
   background-color: inherit;
-  border: 0;
-  padding: 1%;
+  border: none;
+  padding-left: 0.5%;
 }
 #chat-main-div .col #chat-div-chat #chat-div-submit #btn-submit-msg {
   overflow: hidden;
   background-color: inherit;
+  border: none;
+  width: 100%;
+  text-align: center;
+}
+#chat-main-div .col #chat-div-chat #chat-div-submit #btn-submit-msg :parent {
+  text-align: center;
 }
 #chat-main-div .col #chat-div-chat #chat-div-submit #btn-submit-msg img {
-  width: 50%;
-  height: 50%;
+  content: url("https://img.icons8.com/nolan/64/filled-sent.png");
 }
 #chat-main-div .col #chat-div-users {
   height: 90%;
@@ -317,6 +328,47 @@
 #chat-main-div .col #chat-div-users #chat-div-users-inside .div-user .p-user-title {
   font-size: 1.6vw;
   margin: 0;
+}
+
+@media screen and (min-width: 1200px) {
+  #btn-submit-msg {
+    overflow: hidden;
+    background-color: inherit;
+  }
+  #btn-submit-msg img {
+    width: 30px !important;
+    height: 30px !important;
+  }
+}
+@media screen and (min-width: 992px) {
+  #btn-submit-msg {
+    overflow: hidden;
+    background-color: inherit;
+  }
+  #btn-submit-msg img {
+    width: 25px !important;
+    height: 25px !important;
+  }
+}
+@media screen and (min-width: 768px) {
+  #btn-submit-msg {
+    overflow: hidden;
+    background-color: inherit;
+  }
+  #btn-submit-msg img {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
+@media screen and (max-width: 576px) {
+  #btn-submit-msg {
+    overflow: hidden;
+    background-color: inherit;
+  }
+  #btn-submit-msg img {
+    width: 15px !important;
+    height: 15px !important;
+  }
 }
 
 /*# sourceMappingURL=chat.css.map */
