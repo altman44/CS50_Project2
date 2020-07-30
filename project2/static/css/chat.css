@@ -285,26 +285,20 @@
 #chat-main-div .col #chat-div-chat #chat-div-submit {
   background-color: rgba(181, 168, 214, 0.9);
   visibility: hidden;
+  overflow: hidden;
 }
 #chat-main-div .col #chat-div-chat #chat-div-submit #input-message {
-  width: 100%;
-  height: 100%;
-  background-color: inherit;
+  background-color: transparent;
   border: none;
   padding-left: 0.5%;
 }
 #chat-main-div .col #chat-div-chat #chat-div-submit #btn-submit-msg {
-  overflow: hidden;
-  background-color: inherit;
+  background-color: transparent;
   border: none;
-  width: 100%;
-  text-align: center;
-}
-#chat-main-div .col #chat-div-chat #chat-div-submit #btn-submit-msg :parent {
-  text-align: center;
+  height: 100%;
 }
 #chat-main-div .col #chat-div-chat #chat-div-submit #btn-submit-msg img {
-  content: url("https://img.icons8.com/nolan/64/filled-sent.png");
+  content: url("https://img.icons8.com/nolan/35/filled-sent.png");
 }
 #chat-main-div .col #chat-div-users {
   height: 90%;
@@ -331,29 +325,55 @@
 }
 
 @media screen and (min-width: 1200px) {
+  #input-message {
+    width: 90%;
+    height: 35px;
+  }
+
   #btn-submit-msg {
-    overflow: hidden;
-    background-color: inherit;
+    width: 9%;
+  }
+  #btn-submit-msg img {
+    width: 35px !important;
+    height: 35px !important;
+  }
+}
+@media screen and (min-width: 992px) {
+  #input-message {
+    width: 90%;
+    height: 30px;
+  }
+
+  #btn-submit-msg {
+    width: 9%;
   }
   #btn-submit-msg img {
     width: 30px !important;
     height: 30px !important;
   }
 }
-@media screen and (min-width: 992px) {
+@media screen and (min-width: 768px) {
+  #input-message {
+    width: 90%;
+    height: 25px;
+  }
+
   #btn-submit-msg {
-    overflow: hidden;
-    background-color: inherit;
+    width: 9%;
   }
   #btn-submit-msg img {
     width: 25px !important;
     height: 25px !important;
   }
 }
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 576px) {
+  #input-message {
+    width: 90%;
+    height: 20px;
+  }
+
   #btn-submit-msg {
-    overflow: hidden;
-    background-color: inherit;
+    width: 9%;
   }
   #btn-submit-msg img {
     width: 20px !important;
@@ -361,9 +381,13 @@
   }
 }
 @media screen and (max-width: 576px) {
+  #input-message {
+    width: 80%;
+    height: 15px;
+  }
+
   #btn-submit-msg {
-    overflow: hidden;
-    background-color: inherit;
+    width: 18%;
   }
   #btn-submit-msg img {
     width: 15px !important;

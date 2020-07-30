@@ -20,7 +20,7 @@ $color-div-user-active: base.$color-primary-soft;
             margin-bottom: 2vh;
 
             .chat-titles {
-                font: 2.5vw fantasy, "Gill Sans", "Calibri", sans-serif;
+                font: 2.5vw fantasy, 'Gill Sans', 'Calibri', sans-serif;
                 margin: 2vh 0 0 0;
             }
         }
@@ -39,14 +39,17 @@ $color-div-user-active: base.$color-primary-soft;
                 }
 
                 #chat-div-messages-inside {
-                    background-color: darken($color: base.$body-color, $amount: 1);
+                    background-color: darken(
+                        $color: base.$body-color,
+                        $amount: 1
+                    );
                     // background-color: base.$body-color;
                     background-image: url('../img/bubble-message.png');
                     // background-repeat: no-repeat;
                     // background-attachment: fixed;
                     background-size: auto;
                     background-position: center;
-                    padding: 2vh .5vw 2vh .5vw;
+                    padding: 2vh 0.5vw 2vh 0.5vw;
                     // overflow-y: scroll;
                     // overflow-x: hidden;
                     // scroll-behavior: smooth;
@@ -56,17 +59,17 @@ $color-div-user-active: base.$color-primary-soft;
 
                     .div-message {
                         margin-top: 0.5vh;
-    
+
                         .message-div-text {
                             max-width: 60%;
                             background-color: $color-chat-message;
-                            padding: 1vh 1vw .8vh 1vw;
-    
+                            padding: 1vh 1vw 0.8vh 1vw;
+
                             .title-author-message {
                                 font: italic bold 1.2vw Georgia, serif;
                                 margin: 0;
                             }
-    
+
                             .message-content-text {
                                 font: 1vw Georgia, serif;
                                 margin: 0;
@@ -76,39 +79,38 @@ $color-div-user-active: base.$color-primary-soft;
                     }
                 }
             }
-        
+
             #chat-div-submit {
                 background-color: $color-chat-message;
                 visibility: hidden;
+                overflow: hidden;
 
                 #input-message {
-                    width: 100%;
-                    height: 100%;
-                    background-color: inherit;
+                    // width: 90%;
+                    background-color: transparent;
                     border: none;
-                    padding-left: .5%;
+                    padding-left: 0.5%;
                 }
 
-                #chat-div-submit-btn {
+                // #chat-div-submit-btn {
 
-                    #btn-submit-msg {
-                        overflow: hidden;
-                        background-color: inherit;
-                        border: none;
-                        width: 100%;
-    
-                        img {
-                            content: url("https://img.icons8.com/nolan/64/filled-sent.png");
-                            width: 100%;
-                            height: 100%;
-                        }
+                #btn-submit-msg {
+                    background-color: transparent;
+                    border: none;
+                    // width: 9%;
+                    height: 100%;
+
+                    img {
+                        content: url('https://img.icons8.com/nolan/35/filled-sent.png');
                     }
                 }
+
+                // }
             }
         }
-    
+
         #chat-div-users {
-            height: 90%;      
+            height: 90%;
 
             #chat-div-users-inside {
                 overflow-y: scroll;
@@ -136,38 +138,75 @@ $color-div-user-active: base.$color-primary-soft;
                 }
             }
         }
-        
-    }   
+    }
 }
-// @media screen and (min-width: 1200px) {
-//     #btn-submit-msg {
-//         img {
-//             width: 30px !important;
-//             height: 30px !important;
-//         }
-//     }
-// }
-// @media screen and (min-width: 992px) {
-//     #btn-submit-msg {
-//         img {
-//             width: 25px !important;
-//             height: 25px !important;
-//         }
-//     }
-// }
-// @media screen and (min-width: 768px) {
-//     #btn-submit-msg {
-//         img {
-//             width: 20px !important;
-//             height: 20px !important;
-//         }
-//     }
-// }
-// @media screen and (max-width: 576px) {
-//     #btn-submit-msg {
-//         img {
-//             width: 15px !important;
-//             height: 15px !important;
-//         }
-//     }
-// }
+@media screen and (min-width: 1200px) {
+    #input-message {
+        width: 90%;
+        height: 35px;
+    }
+    #btn-submit-msg {
+        width: 9%;
+
+        img {
+            width: 35px !important;
+            height: 35px !important;
+        }
+    }
+}
+@media screen and (min-width: 992px) {
+    #input-message {
+        width: 90%;
+        height: 30px;
+    }
+    #btn-submit-msg {
+        width: 9%;
+
+        img {
+            width: 30px !important;
+            height: 30px !important;
+        }
+    }
+}
+@media screen and (min-width: 768px) {
+    #input-message {
+        width: 90%;
+        height: 25px;
+    }
+    #btn-submit-msg {
+        width: 9%;
+
+        img {
+            width: 25px !important;
+            height: 25px !important;
+        }
+    }
+}
+@media screen and (min-width: 576px) {
+    #input-message {
+        width: 90%;
+        height: 20px;
+    }
+    #btn-submit-msg {
+        width: 9%;
+
+        img {
+            width: 20px !important;
+            height: 20px !important;
+        }
+    }
+}
+@media screen and (max-width: 576px) {
+    #input-message {
+        width: 80%;
+        height: 15px;
+    }
+    #btn-submit-msg {
+        width: 18%;
+
+        img {
+            width: 15px !important;
+            height: 15px !important;
+        }
+    }
+}
