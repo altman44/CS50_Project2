@@ -91,7 +91,7 @@ $btn-fontColor: #ffffff;
     @include input-class;
 }
 .input-form:focus {
-    border: 2.5px solid $color-secondary;
+    border: 1.5px solid $color-secondary;
 }
 .input {
     @include input-class;

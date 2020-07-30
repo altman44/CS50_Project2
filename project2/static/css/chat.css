@@ -80,7 +80,7 @@
 }
 
 .input-form:focus {
-  border: 2.5px solid #eec408;
+  border: 1.5px solid #eec408;
 }
 
 .input {
@@ -286,19 +286,23 @@
   background-color: rgba(181, 168, 214, 0.9);
   visibility: hidden;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 #chat-main-div .col #chat-div-chat #chat-div-submit #input-message {
   background-color: transparent;
   border: none;
   padding-left: 0.5%;
+  width: 94%;
 }
 #chat-main-div .col #chat-div-chat #chat-div-submit #btn-submit-msg {
   background-color: transparent;
-  border: none;
+  border: 0.5px solid #eec408;
+  border-radius: 8px;
+  width: 6%;
   height: 100%;
-}
-#chat-main-div .col #chat-div-chat #chat-div-submit #btn-submit-msg img {
-  content: url("https://img.icons8.com/nolan/35/filled-sent.png");
 }
 #chat-main-div .col #chat-div-users {
   height: 90%;
@@ -326,72 +330,64 @@
 
 @media screen and (min-width: 1200px) {
   #input-message {
-    width: 90%;
+    height: 32px;
+  }
+
+  #btn-submit-msg img {
+    content: url("https://img.icons8.com/nolan/32/filled-sent.png");
+  }
+}
+@media screen and (max-width: 1200px) {
+  #input-message {
     height: 35px;
   }
 
-  #btn-submit-msg {
-    width: 9%;
-  }
   #btn-submit-msg img {
-    width: 35px !important;
-    height: 35px !important;
+    content: url("https://img.icons8.com/nolan/35/filled-sent.png");
   }
 }
-@media screen and (min-width: 992px) {
+@media screen and (max-width: 992px) {
   #input-message {
-    width: 90%;
     height: 30px;
   }
 
-  #btn-submit-msg {
-    width: 9%;
-  }
   #btn-submit-msg img {
-    width: 30px !important;
-    height: 30px !important;
+    content: url("https://img.icons8.com/nolan/30/filled-sent.png");
   }
 }
-@media screen and (min-width: 768px) {
+@media screen and (max-width: 768px) {
   #input-message {
-    width: 90%;
     height: 25px;
   }
 
-  #btn-submit-msg {
-    width: 9%;
-  }
   #btn-submit-msg img {
-    width: 25px !important;
-    height: 25px !important;
-  }
-}
-@media screen and (min-width: 576px) {
-  #input-message {
-    width: 90%;
-    height: 20px;
-  }
-
-  #btn-submit-msg {
-    width: 9%;
-  }
-  #btn-submit-msg img {
-    width: 20px !important;
-    height: 20px !important;
+    content: url("https://img.icons8.com/nolan/25/filled-sent.png");
   }
 }
 @media screen and (max-width: 576px) {
   #input-message {
-    width: 80%;
-    height: 15px;
+    width: 91% !important;
+    height: 20px;
   }
 
   #btn-submit-msg {
-    width: 18%;
+    width: 9% !important;
   }
   #btn-submit-msg img {
-    width: 15px !important;
-    height: 15px !important;
+    content: url("https://img.icons8.com/nolan/20/filled-sent.png");
+  }
+}
+@media screen and (max-width: 280px) {
+  #input-message {
+    width: 87% !important;
+    height: 20px;
+  }
+
+  #btn-submit-msg {
+    width: 13% !important;
+  }
+  #btn-submit-msg img {
+    content: url("https://img.icons8.com/nolan/20/filled-sent.png");
   }
 }
 

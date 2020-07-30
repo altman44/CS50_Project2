@@ -10,9 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Configure Submit message button
         document.querySelector('#btn-submit-msg').onclick = () => {
-            const message = document.querySelector('#input-message').value;
+            const inputMessage = document.querySelector('#input-message');
+            const message = inputMessage.value;
             if (message) {
                 socket.emit('submit message', { message });
+                inputMessage.focus();
             }
         };
     });
